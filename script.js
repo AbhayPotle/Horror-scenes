@@ -52,18 +52,18 @@ const I18N = {
         finalMessage: "बुरा सपना अभी शुरू हुआ है...",
         finalSubmessage: "सुबह के लिए प्रार्थना करें।",
         script: [
-            { text: "यहाँ धूल की गंध आ रही है... और कुछ सड़ा हुआ।", type: 'mother', pitch: 1.2, rate: 0.8, pause: 2000, color: '#ffccaa', prefix: "माँ: " },
-            { text: "यह सालों से खाली है। बस इतना ही है।", type: 'father', pitch: 0.6, rate: 1.1, pause: 1500, color: '#aaaaff', prefix: "पिता: " },
-            { text: "पापा? यहाँ इतनी ठंड क्यों है?", type: 'child', pitch: 1.9, rate: 1.2, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
-            { text: "कोई खिड़की नहीं खुली है... मैंने चेक किया था।", type: 'mother', pitch: 1.4, rate: 1.3, volume: 0.9, pause: 1000, color: '#ffccaa', prefix: "माँ: " },
-            { text: "क्या घर अभी हिला?!", type: 'child', pitch: 2.0, rate: 1.5, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
-            { text: "यह बस... पुरानी लकड़ी है। शांत हो जाओ।", type: 'father', pitch: 0.7, rate: 0.9, pause: 2000, color: '#aaaaff', prefix: "पिता: " },
-            { text: "जाओ...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1000, color: '#888888', prefix: "अज्ञात: " },
-            { text: "क्या तुमने वह आवाज़ सुनी?! किसने कहा?!", type: 'mother', pitch: 1.6, rate: 1.6, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "माँ: " },
-            { text: "मैंने... मैंने कुछ नहीं सुना। मेरे पास रहो।", type: 'father', pitch: 0.8, rate: 1.3, pause: 2000, color: '#aaaaff', prefix: "पिता: " },
-            { text: "तुम यहाँ के नहीं हो...", type: 'ghost', pitch: 0.01, rate: 0.4, pause: 500, color: '#888888', prefix: "अज्ञात: " },
-            { text: "वह चाहता है कि हम चले जाएँ! कृपया!", type: 'child', pitch: 2.0, rate: 1.6, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
-            { text: "इस घर में कोई है!!", type: 'mother', pitch: 1.7, rate: 1.5, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "माँ: " }
+            { text: "यहाँ धूल की गंध आ रही है... और कुछ सड़ा हुआ।", type: 'mother', pitch: 1.1, rate: 0.7, pause: 2500, color: '#ffccaa', prefix: "माँ: " },
+            { text: "यह सालों से खाली है। बस इतना ही है।", type: 'father', pitch: 0.6, rate: 0.8, pause: 2000, color: '#aaaaff', prefix: "पिता: " },
+            { text: "पापा? यहाँ इतनी ठंड क्यों है?", type: 'child', pitch: 1.8, rate: 0.9, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "कोई खिड़की नहीं खुली है... मैंने चेक किया था।", type: 'mother', pitch: 1.3, rate: 0.8, volume: 0.9, pause: 1500, color: '#ffccaa', prefix: "माँ: " },
+            { text: "क्या घर अभी हिला?!", type: 'child', pitch: 1.9, rate: 1.0, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "यह बस... पुरानी लकड़ी है। शांत हो जाओ।", type: 'father', pitch: 0.7, rate: 0.7, pause: 2500, color: '#aaaaff', prefix: "पिता: " },
+            { text: "जाओ...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1500, color: '#888888', prefix: "अज्ञात: " },
+            { text: "क्या तुमने वह आवाज़ सुनी?! किसने कहा?!", type: 'mother', pitch: 1.5, rate: 0.9, volume: 1.0, pause: 1500, color: '#ffccaa', prefix: "माँ: " },
+            { text: "मैंने... मैंने कुछ नहीं सुना। मेरे पास रहो।", type: 'father', pitch: 0.8, rate: 0.8, pause: 2500, color: '#aaaaff', prefix: "पिता: " },
+            { text: "तुम यहाँ के नहीं हो...", type: 'ghost', pitch: 0.01, rate: 0.3, pause: 1000, color: '#888888', prefix: "अज्ञात: " },
+            { text: "वह चाहता है कि हम चले जाएँ! कृपया!", type: 'child', pitch: 1.9, rate: 1.0, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "इस घर में कोई है!!", type: 'mother', pitch: 1.6, rate: 1.0, volume: 1.0, pause: 1500, color: '#ffccaa', prefix: "माँ: " }
         ]
     },
     te: {
@@ -81,18 +81,18 @@ const I18N = {
         finalMessage: "పీడకల ఇప్పుడే మొదలైంది...",
         finalSubmessage: "ఉదయం కోసం ప్రార్థించండి.",
         script: [
-            { text: "ఈ ప్రదేశం దుమ్ము వాసన వస్తోంది... మరియు ఏదో కుళ్ళిన వాసన.", type: 'mother', pitch: 1.2, rate: 0.8, pause: 2000, color: '#ffccaa', prefix: "తల్లి: " },
-            { text: "ఇది ఏళ్లుగా ఖాళీగా ఉంది. అంతే.", type: 'father', pitch: 0.6, rate: 1.1, pause: 1500, color: '#aaaaff', prefix: "తండ్రి: " },
-            { text: "నాన్నా? ఇక్కడ ఎందుకు ఇంత చల్లగా ఉంది?", type: 'child', pitch: 1.9, rate: 1.2, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
-            { text: "కిటికీలు ఏవీ తెరవలేదు... నేను చూశాను.", type: 'mother', pitch: 1.4, rate: 1.3, volume: 0.9, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " },
-            { text: "ఇల్లు కదిలిందా?!", type: 'child', pitch: 2.0, rate: 1.5, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
-            { text: "ఇది కేవలం... పాత చెక్క. శాంతించు.", type: 'father', pitch: 0.7, rate: 0.9, pause: 2000, color: '#aaaaff', prefix: "తండ్రి: " },
-            { text: "వెళ్ళండి...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1000, color: '#888888', prefix: "తెలియదు: " },
-            { text: "ఆ స్వరం విన్నారా?! ఎవరు చెప్పారు?!", type: 'mother', pitch: 1.6, rate: 1.6, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " },
-            { text: "నేను... నాకేమీ వినిపించలేదు. నా దగ్గరే ఉండు.", type: 'father', pitch: 0.8, rate: 1.3, pause: 2000, color: '#aaaaff', prefix: "తండ్రి: " },
-            { text: "మీరు ఇక్కడికి సంబంధించిన వారు కాదు...", type: 'ghost', pitch: 0.01, rate: 0.4, pause: 500, color: '#888888', prefix: "తెలియదు: " },
-            { text: "మనం వెళ్లిపోవాలని ఆశిస్తోంది! దయచేసి!", type: 'child', pitch: 2.0, rate: 1.6, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
-            { text: "ఈ ఇంట్లో ఎవరో ఉన్నారు!!", type: 'mother', pitch: 1.7, rate: 1.5, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " }
+            { text: "ఈ ప్రదేశం దుమ్ము వాసన వస్తోంది... మరియు ఏదో కుళ్ళిన వాసన.", type: 'mother', pitch: 1.1, rate: 0.7, pause: 2500, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "ఇది ఏళ్లుగా ఖాళీగా ఉంది. అంతే.", type: 'father', pitch: 0.6, rate: 0.8, pause: 2000, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "నాన్నా? ఇక్కడ ఎందుకు ఇంత చల్లగా ఉంది?", type: 'child', pitch: 1.8, rate: 0.9, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "కిటికీలు ఏవీ తెరవలేదు... నేను చూశాను.", type: 'mother', pitch: 1.3, rate: 0.8, volume: 0.9, pause: 1500, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "ఇల్లు కదిలిందా?!", type: 'child', pitch: 1.9, rate: 1.0, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "ఇది కేవలం... పాత చెక్క. శాంతించు.", type: 'father', pitch: 0.7, rate: 0.7, pause: 2500, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "వెళ్ళండి...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1500, color: '#888888', prefix: "తెలియదు: " },
+            { text: "ఆ స్వరం విన్నారా?! ఎవరు చెప్పారు?!", type: 'mother', pitch: 1.5, rate: 0.9, volume: 1.0, pause: 1500, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "నేను... నాకేమీ వినిపించలేదు. నా దగ్గరే ఉండు.", type: 'father', pitch: 0.8, rate: 0.8, pause: 2500, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "మీరు ఇక్కడికి సంబంధించిన వారు కాదు...", type: 'ghost', pitch: 0.01, rate: 0.3, pause: 1000, color: '#888888', prefix: "తెలియదు: " },
+            { text: "మనం వెళ్లిపోవాలని ఆశిస్తోంది! దయచేసి!", type: 'child', pitch: 1.9, rate: 1.0, volume: 1.0, pause: 2000, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "ఈ ఇంట్లో ఎవరో ఉన్నారు!!", type: 'mother', pitch: 1.6, rate: 1.0, volume: 1.0, pause: 1500, color: '#ffccaa', prefix: "తల్లి: " }
         ]
     }
 };
@@ -201,6 +201,11 @@ class VoiceEngine {
             utter.rate = Math.max(0.1, Math.min(2, utter.rate));
         }
 
+        // GLOBAL RATE REDUCTION FOR NON-ENGLISH
+        if (lang !== 'en') {
+            utter.rate = utter.rate * 0.8; // Slow down everything by 20% for local languages
+        }
+
         // Select Voice (try to find appropriate gender AND language)
         const voices = window.speechSynthesis.getVoices();
         let voice = null;
@@ -241,30 +246,44 @@ class VoiceEngine {
         // CRITICAL FIX: Keep reference to prevent Garbage Collection
         this.currentUtterance = utter;
 
-        // Safety Timeout (in case onend never fires)
-        const estimatedDuration = (text.length / 5) * 1000; // Rough estimate
-        const safetyTimer = setTimeout(() => {
-            if (this.currentUtterance === utter) {
-                console.warn("VoiceEngine: Safety Timeout Triggered");
-                if (onEnd) onEnd();
-                this.currentUtterance = null;
-            }
-        }, estimatedDuration + 5000); // 5s buffer
+        // --- TIMER BASED FLOW CONTROL (Decoupled from Event) ---
+        // We do NOT trust the browser's onend event for timing anymore.
+        // We calculate how long it *should* take, and we wait that long. Period.
 
+        let baseCharTime = 150;
+        // INCREASE TIMING FOR HINDI/TELUGU
+        if (lang === 'hi' || lang === 'te') {
+            baseCharTime = 250; // Vastly slower char time for Indian languages
+        }
+
+        const speedFactor = (1 / (utter.rate || 1));
+        // Minimum floor of 2 seconds for ANY dialogue to ensure readability
+        const calculatedDuration = Math.max(2000, (text.length * baseCharTime * speedFactor) + 800);
+
+        console.log(`[VoiceEngine] Speaking: "${text.substring(0, 20)}..."`);
+        console.log(`[VoiceEngine] FORCED DURATION: ${calculatedDuration}ms (CharTime: ${baseCharTime})`);
+
+        // The "Next" trigger is purely time-based now
+        if (onEnd) {
+            setTimeout(() => {
+                console.log("[VoiceEngine] Duration elapsed. Triggering next.");
+                onEnd();
+            }, calculatedDuration);
+        }
+
+        // Clean up reference when the browser *thinks* it's done, but don't trigger flow
         utter.onend = () => {
-            clearTimeout(safetyTimer);
-            if (onEnd) onEnd();
             this.currentUtterance = null;
         };
 
         utter.onerror = (e) => {
-            console.error("VoiceEngine Error:", e);
-            clearTimeout(safetyTimer);
-            if (onEnd) onEnd();
             this.currentUtterance = null;
         };
 
-        this.synth.speak(utter);
+        // Delay speech slightly to ensure cancellation of previous audio processed
+        setTimeout(() => {
+            this.synth.speak(utter);
+        }, 50);
     }
 
     speakSequence(lines, lang = 'en', onComplete) {
@@ -717,11 +736,15 @@ class TapeDeck {
         // 1. Throat Drone (Sawtooth with Low Pass)
         const osc = this.ctx.createOscillator();
         osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(60, t);
+        osc.frequency.linearRampToValueAtTime(40, t + 2);
         osc.frequency.setValueAtTime(55, t); // A1
         osc.frequency.linearRampToValueAtTime(45, t + 3); // Slow drop
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(400, t);
+        filter.Q.value = 10;
         filter.frequency.setValueAtTime(300, t);
         filter.Q.value = 5;
 
@@ -736,6 +759,8 @@ class TapeDeck {
         lfoGain.connect(filter.frequency);
 
         const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.4, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 2.5);
         gain.gain.setValueAtTime(0, t);
         gain.gain.linearRampToValueAtTime(0.6, t + 0.5);
         gain.gain.exponentialRampToValueAtTime(0.01, t + 4.0);
@@ -745,6 +770,7 @@ class TapeDeck {
         gain.connect(this.masterGain);
 
         osc.start(t);
+        osc.stop(t + 2.5);
         lfo.start(t);
         osc.stop(t + 4.0);
         lfo.stop(t + 4.0);
@@ -764,15 +790,20 @@ class TapeDeck {
     }
 
     playExorcism() {
+        // High pitched screetch (Latin chanting simulation)
         // "Choir of the Damned" - Multiple dissonant screeches
         const t = this.ctx.currentTime;
         const count = 3;
+
+        // Ring Mod (Conceptual - simpler implementation for stability)
+        // multiple layers
 
         for (let i = 0; i < count; i++) {
             const osc = this.ctx.createOscillator();
             osc.type = i % 2 === 0 ? 'sawtooth' : 'square';
             const startFreq = 800 + (Math.random() * 500);
             osc.frequency.setValueAtTime(startFreq, t);
+
             // Erratic pitch movement
             osc.frequency.exponentialRampToValueAtTime(startFreq + 200, t + 0.1);
             osc.frequency.exponentialRampToValueAtTime(startFreq - 100, t + 0.3);
@@ -1082,30 +1113,12 @@ class HybridEngine {
     }
 
     startSequence() {
-        console.log("[Flow] Starting Cinematic Sequence...");
-        const landing = document.getElementById('landing-page');
+        document.getElementById('landing-page').classList.add('hidden');
+
+        // 1. Show Episode Title (Cinematic)
         const title = document.getElementById('episode-title');
-
-        if (!title) {
-            console.error("[Critical] Episode Title Element Not Found!");
-            return;
-        }
-
-        // FORCE visibility with inline styles to override any CSS classes
-        title.style.cssText = "display: flex !important; opacity: 1 !important; z-index: 10000 !important;";
-        title.classList.remove('hidden');
         title.classList.add('visible');
-
-        console.log("[Flow] Title visibility forced.");
-
-        // Safe cleanup of landing page
-        if (landing) {
-            setTimeout(() => {
-                landing.style.display = 'none';
-                landing.classList.add('hidden');
-                console.log("[Flow] Landing page hidden.");
-            }, 100);
-        }
+        title.style.display = 'flex'; // Ensure flex
 
         // Play Intro Audio
         this.tapeDeck.playScenario(1); // Haunted House
@@ -1113,8 +1126,7 @@ class HybridEngine {
         // 2. Transition to Loading Screen after title
         setTimeout(() => {
             title.classList.remove('visible');
-            title.classList.add('hidden'); // Ensure it hides
-            setTimeout(() => title.style.display = 'none', 2000);
+            setTimeout(() => title.style.display = 'none', 2000); // Hide after fade out
 
             document.getElementById('loading-screen').classList.remove('hidden');
 
@@ -1122,9 +1134,8 @@ class HybridEngine {
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
                 this.startMonitoring();
-            }, 5000); // Increased load time for tension
-
-        }, 6000); // Longer title duration (6s)
+            }, 3000);
+        }, 4000); // 4 seconds of title display (User modification)
     }
 
     triggerConversation() {
