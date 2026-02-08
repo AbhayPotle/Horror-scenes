@@ -216,96 +216,93 @@ class VoiceEngine {
             utter.rate = utter.rate * 0.8; // Slow down everything by 20% for local languages
         }
 
-        // Select Voice (try to find appropriate gender AND language)
+        // Select Voice
         const voices = window.speechSynthesis.getVoices();
         let voice = null;
-
-        // Filter by language first (Strict filter)
-        const langCode = lang.split('-')[0]; // 'hi', 'te', 'en'
+        const langCode = lang.split('-')[0];
         const langVoices = voices.filter(v => v.lang.toLowerCase().startsWith(langCode));
-
-        // If we have voices for this language, pick from them
         const pool = langVoices.length > 0 ? langVoices : voices;
 
-        console.log(`Voice Selection for ${lang}: found ${langVoices.length} voices.`);
-
-        // Helper to find voice in pool
         const findVoice = (keywords) => {
             return pool.find(v => keywords.some(k => v.name.toLowerCase().includes(k.toLowerCase())));
         };
 
         if (type === 'child' || type === 'mother' || type === 'ghost') {
-            // Female voices - aggressive search
             voice = findVoice(['Zira', 'Eva', 'Sara', 'Female', 'Google US English', 'Samantha', 'Hindi Female', 'Telugu Female']);
         } else {
-            // Male voices
             voice = findVoice(['David', 'Mark', 'Male', 'Google UK English Male', 'Hindi Male', 'Telugu Male']);
         }
 
-        // Fallback to first available in the language pool
-        if (!voice && pool.length > 0) {
-            voice = pool[0];
-        }
-        // Last resort: any voice
-        if (!voice && voices.length > 0) {
-            voice = voices[0];
-        }
-
+        if (!voice && pool.length > 0) voice = pool[0];
+        if (!voice && voices.length > 0) voice = voices[0];
         if (voice) utter.voice = voice;
 
-        // CRITICAL FIX: Keep reference to prevent Garbage Collection
         this.currentUtterance = utter;
 
-        // --- TIMER BASED FLOW CONTROL (Decoupled from Event) ---
-        // We do NOT trust the browser's onend event for timing anymore.
-        // We calculate how long it *should* take, and we wait that long. Period.
+        // --- SMART RACE TIMING (Best of both worlds) ---
+        // 1. Calculate MINIMUM duration (to prevent instant skipping)
+        // 2. Calculate MAXIMUM duration (to prevent hanging)
+        // 3. Listen for natural 'onend' but enforce constraints
 
-        let baseCharTime = 150;
-        // INCREASE TIMING FOR HINDI/TELUGU
-        if (lang === 'hi' || lang === 'te') {
-            baseCharTime = 250; // Vastly slower char time for Indian languages
-        }
+        let baseCharTime = 100; // Faster base for improved flow
+        if (lang === 'hi' || lang === 'te') baseCharTime = 180;
 
         const speedFactor = (1 / (utter.rate || 1));
-        // Minimum floor of 2 seconds for ANY dialogue to ensure readability
-        const calculatedDuration = Math.max(2000, (text.length * baseCharTime * speedFactor) + 800);
+        const minDuration = Math.max(1000, (text.length * 50 * speedFactor)); // Minimum 50ms per char
+        const maxDuration = Math.max(2000, (text.length * baseCharTime * speedFactor) + 2000); // Failsafe
 
-        console.log(`[VoiceEngine] Speaking: "${text.substring(0, 20)}..."`);
-        console.log(`[VoiceEngine] FORCED DURATION: ${calculatedDuration}ms (CharTime: ${baseCharTime})`);
+        console.log(`[VoiceEngine] Speaking "${text.substring(0, 15)}...". Min: ${minDuration}ms, Max: ${maxDuration}ms`);
 
-        // DUCK AUDIO START
-        if (window.engine && window.engine.tapeDeck) {
-            window.engine.tapeDeck.duck(true);
-        }
+        // Duck Audio
+        if (window.engine && window.engine.tapeDeck) window.engine.tapeDeck.duck(true);
 
-        // The "Next" trigger is purely time-based now
-        if (onEnd) {
-            setTimeout(() => {
-                console.log("[VoiceEngine] Duration elapsed. Triggering next.");
-                // DUCK AUDIO END
-                if (window.engine && window.engine.tapeDeck) {
-                    window.engine.tapeDeck.duck(false);
-                }
-                onEnd();
-            }, calculatedDuration);
-        }
+        let completed = false;
+        const startTime = Date.now();
 
-        // Clean up reference when the browser *thinks* it's done, but don't trigger flow
-        utter.onend = () => {
+        const complete = () => {
+            if (completed) return;
+            completed = true;
+
+            // Restore Audio
+            if (window.engine && window.engine.tapeDeck) window.engine.tapeDeck.duck(false);
+
             this.currentUtterance = null;
+            if (onEnd) onEnd();
         };
 
-        utter.onerror = (e) => {
-            this.currentUtterance = null;
-            // Ensure volume returns even on error
-            if (window.engine && window.engine.tapeDeck) {
-                window.engine.tapeDeck.duck(false);
+        // 1. Natural End Trigger
+        utter.onend = () => {
+            const elapsed = Date.now() - startTime;
+            if (elapsed < minDuration) {
+                // Too fast! Wait out the remainder of minDuration
+                setTimeout(complete, minDuration - elapsed);
+            } else {
+                complete();
             }
         };
 
-        // Delay speech slightly to ensure cancellation of previous audio processed
+        utter.onerror = (e) => {
+            console.warn("TTS Error, forcing complete");
+            complete();
+        };
+
+        // 2. Failsafe Timeout (Max Duration)
         setTimeout(() => {
-            this.synth.speak(utter);
+            if (!completed) {
+                console.warn("TTS Timed out (Failsafe triggered)");
+                this.synth.cancel(); // Force stop
+                complete();
+            }
+        }, maxDuration);
+
+        // Delay speech slightly to ensure playback
+        setTimeout(() => {
+            try {
+                this.synth.speak(utter);
+            } catch (e) {
+                console.error("Speech Interrupted", e);
+                complete();
+            }
         }, 50);
     }
 
@@ -974,6 +971,18 @@ class HybridEngine {
 
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
+
+        // GLOBAL AUDIO UNLOCK (Catch-all for mobile)
+        const unlockAudio = () => {
+            if (this.tapeDeck) this.tapeDeck.resume();
+            if (this.voiceEngine) this.voiceEngine.unlock();
+            document.body.removeEventListener('touchstart', unlockAudio);
+            document.body.removeEventListener('click', unlockAudio);
+            document.body.removeEventListener('keydown', unlockAudio);
+        };
+        document.body.addEventListener('touchstart', unlockAudio, { once: true });
+        document.body.addEventListener('click', unlockAudio, { once: true });
+        document.body.addEventListener('keydown', unlockAudio, { once: true });
 
         // Show CCTV Feed
         this.canvas.classList.add('visible');
