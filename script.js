@@ -689,6 +689,18 @@ class HybridEngine {
 
             // Draw Current Frame (Adjusted by Seek Time)
             if (this.scareImages.length > 0) {
+                // Apply "Cursed Portrait" Styles (Random per frame for glitch)
+                const rand = Math.random();
+                if (rand > 0.98) {
+                    this.ctx.filter = 'contrast(2.0) saturate(0) invert(1)'; // Deep Fried
+                } else if (rand > 0.95) {
+                    this.ctx.filter = 'sepia(0.8) contrast(1.2) brightness(0.8)'; // Old Photo
+                } else if (rand > 0.92) {
+                    this.ctx.filter = 'blur(2px) opacity(0.8)'; // Ghostly
+                } else {
+                    this.ctx.filter = 'contrast(1.1) brightness(0.9)'; // Standard Grim
+                }
+
                 const adjustedTime = now + this.timeOffset;
                 const frameIndex = Math.floor(adjustedTime / 100) % this.scareImages.length;
                 const img = this.scareImages[frameIndex];
