@@ -355,40 +355,57 @@ class TapeDeck {
 
     init() {
         if (this.ctx) return;
+
+        // Helper for Mock AudioParam (Used in both Polyfill & Full Mock)
+        const getMockParam = () => ({
+            value: 0,
+            setValueAtTime: () => { },
+            linearRampToValueAtTime: () => { },
+            exponentialRampToValueAtTime: () => { },
+            cancelScheduledValues: () => { },
+            setTargetAtTime: () => { }
+        });
+
         try {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             if (!AudioCtx) throw new Error("AudioContext not supported");
             this.ctx = new AudioCtx();
             this.masterGain = this.ctx.createGain();
             this.masterGain.connect(this.ctx.destination);
+
+            // POLYFILL: createStereoPanner for older browsers
+            if (!this.ctx.createStereoPanner) {
+                console.warn("TapeDeck: Polyfilling createStereoPanner");
+                this.ctx.createStereoPanner = () => {
+                    const panner = this.ctx.createGain(); // Fallback to gain (mono)
+                    panner.pan = getMockParam(); // Add fake pan param
+                    return panner;
+                };
+            }
+
             // LOWER DEFAULT VOLUME FOR BETTER BALANCE
             this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
         } catch (e) {
-            console.warn("TapeDeck: AudioContext init failed.", e);
+            console.warn("TapeDeck: AudioContext init failed. Using Mock.", e);
 
-            // Helper for Mock AudioParam
-            const mockParam = () => ({
-                value: 0,
-                setValueAtTime: () => { },
-                linearRampToValueAtTime: () => { },
-                exponentialRampToValueAtTime: () => { },
-                cancelScheduledValues: () => { },
-                setTargetAtTime: () => { }
-            });
-
-            // Mock context to prevent crashes downstream
+            // Complete Mock Context
             this.ctx = {
                 state: 'suspended',
                 resume: () => Promise.resolve(),
-                createGain: () => ({
-                    gain: mockParam(),
-                    connect: () => { }
-                }),
+                createGain: () => ({ gain: getMockParam(), connect: () => { } }),
                 createBuffer: () => ({ getChannelData: () => [] }),
-                createBufferSource: () => ({ connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { }, buffer: null, loop: false }),
-                createBiquadFilter: () => ({ connect: () => { }, frequency: mockParam(), Q: mockParam(), type: 'lowpass' }),
-                createOscillator: () => ({ connect: () => { }, start: () => { }, stop: () => { }, frequency: mockParam(), detune: mockParam(), type: 'sine' }),
-                createStereoPanner: () => ({ connect: () => { }, pan: mockParam() }),
+                createBufferSource: () => ({
+                    connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { },
+                    buffer: null, loop: false, playbackRate: getMockParam()
+                }),
+                createBiquadFilter: () => ({
+                    connect: () => { }, frequency: getMockParam(), Q: getMockParam(), type: 'lowpass'
+                }),
+                createOscillator: () => ({
+                    connect: () => { }, start: () => { }, stop: () => { },
+                    frequency: getMockParam(), detune: getMockParam(), type: 'sine'
+                }),
+                createStereoPanner: () => ({ connect: () => { }, pan: getMockParam() }),
                 destination: {},
                 currentTime: 0,
                 sampleRate: 44100
