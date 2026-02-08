@@ -168,6 +168,7 @@ class VoiceEngine {
     }
 
     unlock() {
+        if (!window.SpeechSynthesisUtterance) return;
         if (this.synth.speaking) this.synth.cancel();
         // Play a silent utterance to unlock the engine (iOS/Chrome requirement)
         const utter = new SpeechSynthesisUtterance(" ");
@@ -178,6 +179,11 @@ class VoiceEngine {
     }
 
     speak(text, lang, type = 'demon', params = {}, onEnd = null) {
+        if (!window.SpeechSynthesisUtterance) {
+            if (onEnd) onEnd();
+            return;
+        }
+
         if (this.synth.speaking) this.synth.cancel();
 
         const utter = new SpeechSynthesisUtterance(text);
