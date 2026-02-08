@@ -100,7 +100,20 @@ const I18N = {
 // Text-to-Speech Engine
 class VoiceEngine {
     constructor() {
-        this.synth = window.speechSynthesis;
+        try {
+            this.synth = window.speechSynthesis;
+            if (!this.synth) throw new Error("SpeechSynthesis not supported");
+        } catch (e) {
+            console.warn("VoiceEngine: Speech Synthesis unavailable. Using Mock.", e);
+            this.synth = {
+                getVoices: () => [],
+                speak: () => { },
+                cancel: () => { },
+                speaking: false,
+                onvoiceschanged: null
+            };
+        }
+
         this.voices = [];
         this.currentUtterance = null; // Prevent GC
         this.voicesLoaded = false;
@@ -342,11 +355,29 @@ class TapeDeck {
 
     init() {
         if (this.ctx) return;
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.connect(this.ctx.destination);
-        // LOWER DEFAULT VOLUME FOR BETTER BALANCE
-        this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) throw new Error("AudioContext not supported");
+            this.ctx = new AudioCtx();
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.connect(this.ctx.destination);
+            // LOWER DEFAULT VOLUME FOR BETTER BALANCE
+            this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        } catch (e) {
+            console.warn("TapeDeck: AudioContext init failed.", e);
+            // Mock context to prevent crashes downstream
+            this.ctx = {
+                state: 'suspended',
+                resume: () => Promise.resolve(),
+                createGain: () => ({ gain: { setValueAtTime: () => { }, cancelScheduledValues: () => { }, setTargetAtTime: () => { } }, connect: () => { } }),
+                createBuffer: () => ({ getChannelData: () => [] }),
+                createBufferSource: () => ({ connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { }, buffer: null }),
+                destination: {},
+                currentTime: 0,
+                sampleRate: 44100
+            };
+            this.masterGain = this.ctx.createGain();
+        }
     }
 
     resume() {
@@ -1106,8 +1137,12 @@ class HybridEngine {
         if (!CONFIG.languages.includes(lang)) return;
 
         // CRITICAL: Unlock Audio Context & TTS on User Gesture
-        this.tapeDeck.resume();
-        this.voiceEngine.unlock();
+        try {
+            this.tapeDeck.resume();
+            this.voiceEngine.unlock();
+        } catch (e) {
+            console.warn("Audio unlock failed (proceeding anyway):", e);
+        }
 
         this.currentLang = lang;
         console.log(`[Flow] Language confirmed: ${lang}`);
