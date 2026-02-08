@@ -728,7 +728,7 @@ class HybridEngine {
             // SCENE: THE HOUSE THAT BREATHES
             {
                 text: "This place smells like dust and something rotten.", type: 'mother',
-                pitch: 1.1, rate: 0.9,
+                pitch: 1.1, rate: 0.8, // Slow, disgusted
                 pause: 2000,
                 onStart: () => {
                     setScene("⚠ EXT. FARMHOUSE - DUSK ⚠", 'farmhouse-filter', 'bg-farmhouse');
@@ -749,7 +749,7 @@ class HybridEngine {
             },
             {
                 text: "Why is it so cold in here?", type: 'child',
-                pitch: 1.8, rate: 0.8,
+                pitch: 1.8, rate: 1.1, // High pitch, slightly fast (Anxiety)
                 pause: 1500,
                 onStart: () => {
                     // Transition to Interior
@@ -757,11 +757,14 @@ class HybridEngine {
                     canvas.classList.add('shake-slow');
                     if (subUI) { subUI.innerText = "Child: Why is it so cold in here?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
                 },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
+                onEnd: () => {
+                    if (subUI) subUI.classList.remove('visible');
+                    this.triggerParanormalEvent(); // Random scare
+                }
             },
             {
                 text: "There’s no windows open…", type: 'mother',
-                pitch: 1.3, rate: 1.0,
+                pitch: 1.3, rate: 1.1, // Rising Panic
                 pause: 1000,
                 onStart: () => {
                     if (subUI) { subUI.innerText = "Mother: There’s no windows open…"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
@@ -773,7 +776,7 @@ class HybridEngine {
             },
             {
                 text: "Did the house just move?", type: 'child',
-                pitch: 1.9, rate: 1.2,
+                pitch: 1.9, rate: 1.3, // Fast/Scared
                 pause: 1500,
                 onStart: () => {
                     canvas.classList.add('shake-slow');
@@ -792,7 +795,7 @@ class HybridEngine {
             },
             {
                 text: "Go...", type: 'ghost',
-                pitch: 0.1, rate: 0.2, volume: 1.0,
+                pitch: 0.01, rate: 0.2, volume: 1.0, // Demonic Slow
                 pause: 1000,
                 onStart: () => {
                     setScene("⚠ UNKNOWN FREQUENCY ⚠", 'invert', 'bg-hallway');
@@ -800,13 +803,14 @@ class HybridEngine {
                     if (subUI) { subUI.innerText = "Unknown: Go..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; subUI.style.fontSize = '2rem'; }
                 },
                 onEnd: () => {
-                    canvas.classList.remove('invert');
+                    // Keep the invert for a bit longer to be scary
+                    setTimeout(() => canvas.classList.remove('invert'), 500);
                     if (subUI) { subUI.classList.remove('visible'); subUI.style.fontSize = ''; }
                 }
             },
             {
                 text: "Did you hear that voice?", type: 'mother',
-                pitch: 1.5, rate: 1.3,
+                pitch: 1.5, rate: 1.4, // High Panic
                 pause: 1000,
                 onStart: () => {
                     if (subUI) { subUI.innerText = "Mother: Did you hear that voice?"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
@@ -815,7 +819,7 @@ class HybridEngine {
             },
             {
                 text: "I didn’t hear anything.", type: 'father',
-                pitch: 0.6, rate: 1.1,
+                pitch: 0.6, rate: 1.2, // Rushed/Lying (Nervous)
                 pause: 2000,
                 onStart: () => {
                     if (subUI) { subUI.innerText = "Father: I didn’t hear anything."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
@@ -824,7 +828,7 @@ class HybridEngine {
             },
             {
                 text: "You don’t belong...", type: 'ghost',
-                pitch: 0.1, rate: 0.4,
+                pitch: 0.01, rate: 0.4,
                 pause: 500,
                 onStart: () => {
                     setScene("⚠ SIGNAL INTRUSION ⚠", 'glitch-heavy', 'bg-hallway');
@@ -838,7 +842,7 @@ class HybridEngine {
             },
             {
                 text: "It doesn’t want us here.", type: 'child',
-                pitch: 1.8, rate: 0.6,
+                pitch: 1.9, rate: 0.5, // Crying/Slow (Sobbing)
                 pause: 1500,
                 onStart: () => {
                     if (subUI) { subUI.innerText = "Child: It doesn’t want us here."; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
@@ -847,7 +851,7 @@ class HybridEngine {
             },
             {
                 text: "Someone is inside this house.", type: 'mother',
-                pitch: 1.2, rate: 0.8,
+                pitch: 1.3, rate: 0.6, // Terrified Whisper (Slow rate + high pitch = whispered fear)
                 pause: 1000,
                 onStart: () => {
                     if (subUI) { subUI.innerText = "Mother: Someone is inside this house."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }

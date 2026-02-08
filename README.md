@@ -1,65 +1,108 @@
-# 🕯️ The House That Breathes: Interactive Horror Engine
+<div align="center">
 
-![Antigravity AI](https://img.shields.io/badge/Powered%20By-Antigravity%20AI-blueviolet?style=for-the-badge) ![Vibe Coding](https://img.shields.io/badge/Methodology-Vibe%20Coding-ff0055?style=for-the-badge) ![Status](https://img.shields.io/badge/Status-Live%20Prototype-success?style=for-the-badge)
+# 🕯️ THE HOUSE THAT BREATHES
+### *A Live Procedural Horror Experience*
 
-> *"This place smells like dust and something rotten..."*
+![The House That Breathes Banner](assets/farmhouse_ext.png)
 
-A **hybrid web-horror experience** that pushes the boundaries of browser-based immersion. This project abandons heavy video assets in favor of a **code-driven engine** that generates Fear in real-time using procedural audio, synthesized acting, and cinematic CSS visuals.
+![Status](https://img.shields.io/badge/Status-Live%20Prototype-success?style=for-the-badge) 
+![Tech](https://img.shields.io/badge/Tech-Vanilla%20JS%20%7C%20CSS3%20%7C%20Web%20Audio-blueviolet?style=for-the-badge)
+![Vibe](https://img.shields.io/badge/Vibe-Cinematic%20Horror-red?style=for-the-badge)
+
+<br>
+
+> *"This place smells like dust... and something rotten."*
+
+<br>
+
+</div>
 
 ---
 
-## 💀 Project Overview
+## 💀 Overview
 
-This is not just a website; it is a **Paramount-quality horror simulation** running entirely in the browser.
+**The House That Breathes** is a hybrid web-horror engine that pushes the boundaries of browser-based immersion. It abandons heavy video assets in favor of a **code-driven engine** that synthesizes Fear in real-time.
 
-### Key Features
-*   **🔊 Procedural Audio Engine**: No pre-recorded MP3s. Background drones, floor creaks, and door slams are generated *mathematically* in real-time using the **Web Audio API**.
-*   **🗣️ Emotional Speech Synthesis**: A custom `VoiceEngine` that manipulates browser TTS (Text-to-Speech) to whisper, scream, and tremble with fear.
-*   **🎥 Cinematic CSS Visuals**: "Ken Burns" camera movements, film grain, and dynamic lighting implemented purely with CSS3 optimizations.
-*   **🧠 Neural Canvas**: A dynamic canvas layer that mimics "glitches" and "paranormal signal intrusions" using pixel manipulation.
+By leveraging the **Web Audio API** for procedural soundscapes and **CSS3** for cinematic visuals, this project delivers a studio-quality horror experience entirely in the browser, with **zero external dependencies**.
+
+![Atmospheric Interior](assets/farmhouse_int.png)
+
+### 🩸 Glimpse of the Horror
+
+> *We found these files on the camera... they shouldn't exist.*
+
+<div align="center">
+  <img src="assets/scare_1.png" width="45%" alt="Scare Preview 1">
+  <img src="assets/scare_10.png" width="45%" alt="Scare Preview 2">
+</div>
+
 
 ---
 
-## 🤖 Technology Stack
+## 🩸 Key Features
 
-This project was architected and implemented using **Antigravity AI**, following the **"Vibe Coding"** methodology (Flow-state, iteration-heavy development).
+### 🔊 Procedural Audio Engine
+No pre-recorded loops. The engine generates audio mathematically in real-time:
+*   **Dynamic Soundscapes**: Industrial drones, floor creaks, and atmospheric tension synthesized on the fly.
+*   **Binaural Audio**: Spatial audio effects simulating 3D sound positioning.
 
-| Component | Technology Used | Description |
+### 🎥 Cinematic Visuals (No Video Files)
+Visuals are rendered natively using advanced CSS3 techniques:
+*   **"Ken Burns" Camera Work**: Smooth pan and zoom effects via CSS transforms.
+*   **Neural Canvas**: A dynamic canvas layer mimicking "glitches" and paranormal signal intrusions using pixel manipulation.
+*   **Film Grain & Lighting**: Dynamic lighting and grain effects created with CSS filters and blend modes.
+
+### 🗣️ Emotional Speech Synthesis
+A custom `VoiceEngine` manipulates the browser's **SpeechSynthesis API** to deliver dialogue with emotional nuance—whispering, trembling, and screaming—without voice actors.
+
+---
+
+## 🛠️ Technology Stack
+
+This project was architected using **Antigravity AI** and follows the **Vibe Coding** methodology.
+
+| Component | Technology | Description |
 | :--- | :--- | :--- |
 | **Core Logic** | `JavaScript (ES6+)` | Async/Await event loop for timing scenes. |
-| **Audio** | `Web Audio API` | Oscillators & Gain Nodes for sound effects. |
-| **Acting** | `SpeechSynthesis API` | Pitch/Rate manipulation for emotion. |
-| **Visuals** | `CSS3 / Hardware Accel` | 3D Transforms, Filters, Blend Modes. |
-| **Assets** | `Generative AI` | 3D-assisted environmental renders. |
+| **Audio** | `Web Audio API` | Oscillators & Gain Nodes for sound generation. |
+| **Visuals** | `CSS3 / HTML5 Canvas` | Hardware-accelerated animations & pixel manipulation. |
+| **Acting** | `SpeechSynthesis API` | Pitch/Rate modulation for generative voice acting. |
 
 ---
 
-## 🕹️ Episode 1: The House That Breathes
+## 🚀 Getting Started
 
-The current build features the pilot episode:
-1.  **The Arrival**: A family enters a dusty, abandoned farmhouse.
-2.  **The Scent**: The mother notices a rotting smell that shouldn't be there.
-3.  **The Signal**: An unknown entity interrupts the broadcast frequency.
-4.  **The Jumpscare**: A procedurally triggered climax.
+### Prerequisites
+No backend or build tools required. Pure client-side application.
 
----
-
-## 🚀 How to Run
-
+### Installation
 1.  **Clone the Repository**
     ```bash
     git clone https://github.com/AbhayPotle/Horror-scenes.git
+    cd Horror-scenes
     ```
-2.  **Open locally**
-    Simply open `index.html` in any modern browser (Chrome/Edge recommended for best Speech Synthesis support).
-    *No Node.js or backend required—it is a pure client-side experience.*
+2.  **Run Locally**
+    Open `index.html` in any modern web browser (Chrome/Edge recommended for optimal Speech Synthesis support).
 
 ---
+
+## 🕹️ The Experience (Episode 1)
+**Feature Pilot: "The Arrival"**
+1.  **The Scent**: The mother notices a rotting smell.
+2.  **The Signal**: An unknown entity interrupts the broadcast frequency.
+3.  **The Climax**: A procedurally triggered jumpscare event.
+
+---
+
+<div align="center">
 
 ## 👨‍💻 Author
 
 **Abhay**  
 *Built with the assistance of Google's Antigravity AI.*
 
----
+<br>
+
 *© 2026 Horror Scenes Project. All signals are simulated. You are safe.*
+
+</div>
