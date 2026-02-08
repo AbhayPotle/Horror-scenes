@@ -9,28 +9,91 @@ const CONFIG = {
 // Localization Dictionary
 const I18N = {
     en: {
+        landingTitle: "WARREN OCCULT MUSEUM",
+        landingWarning: "WARNING: Viewer discretion is advised.",
+        landingSubwarning: "Live feed contains paranormal activity.",
         loading: ["CONNECTING...", "SUMMONING...", "DO NOT LOOK BEHIND YOU", "THEY ARE HERE"],
         warning: "WARNING: EXTREME HORROR CONTENT",
         start: "ENTER IF YOU DARE",
         cam: "CAM 04: ARTIFACT ROOM",
         spiritBox: ["I see you...", "Turn around...", "Let me in...", "Run...", "Hide..."],
-        jumpscare: "FOUND YOU"
+        jumpscare: "FOUND YOU",
+        episodeTitle: "EPISODE 1",
+        episodeSubtitle: "THE HOUSE THAT BREATHES",
+        finalMessage: "THE NIGHTMARE HAS ONLY BEGUN...",
+        finalSubmessage: "PRAY FOR THE DAWN.",
+        script: [
+            { text: "This place smells like... dust. And something rotten.", type: 'mother', pitch: 1.2, rate: 0.8, pause: 2000, color: '#ffccaa', prefix: "Mother: " },
+            { text: "It’s been empty for years. That’s all it is.", type: 'father', pitch: 0.6, rate: 1.1, pause: 1500, color: '#aaaaff', prefix: "Father: " },
+            { text: "Daddy? Why is it so cold in here?", type: 'child', pitch: 1.9, rate: 1.2, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "Child: " },
+            { text: "There’s no windows open… I checked them.", type: 'mother', pitch: 1.4, rate: 1.3, volume: 0.9, pause: 1000, color: '#ffccaa', prefix: "Mother: " },
+            { text: "Did the house just move?!", type: 'child', pitch: 2.0, rate: 1.5, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "Child: " },
+            { text: "It's just... old wood settling. Calm down.", type: 'father', pitch: 0.7, rate: 0.9, pause: 2000, color: '#aaaaff', prefix: "Father: " },
+            { text: "Goooo...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1000, color: '#888888', prefix: "Unknown: " },
+            { text: "Did you hear that voice?! Who said that?!", type: 'mother', pitch: 1.6, rate: 1.6, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "Mother: " },
+            { text: "I... I didn’t hear anything. Stay close to me.", type: 'father', pitch: 0.8, rate: 1.3, pause: 2000, color: '#aaaaff', prefix: "Father: " },
+            { text: "You don’t belong...", type: 'ghost', pitch: 0.01, rate: 0.4, pause: 500, color: '#888888', prefix: "Unknown: " },
+            { text: "It wants us to leave! PLEASE!", type: 'child', pitch: 2.0, rate: 1.6, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "Child: " },
+            { text: "SOMEONE IS INSIDE THIS HOUSE!!", type: 'mother', pitch: 1.7, rate: 1.5, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "Mother: " }
+        ]
     },
     hi: {
+        landingTitle: "वारेन ओकल्ट म्यूजियम",
+        landingWarning: "चेतावनी: दर्शक विवेक की सलाह दी जाती है।",
+        landingSubwarning: "लाइव फीड में असाधारण गतिविधि शामिल है।",
         loading: ["कनेक्ट हो रहा है...", "आवाहन...", "पीछे मत देखो", "वे यहाँ हैं"],
         warning: "चेतावनी: अत्यधिक डरावनी सामग्री",
         start: "हिम्मत है तो प्रवेश करें",
         cam: "कैमरा ०४: आर्टिफैक्ट रूम",
         spiritBox: ["मैं तुम्हें देख रहा हूँ...", "पीछे मुड़ो...", "मुझे अंदर आने दो...", "भागो...", "छुपा लो..."],
-        jumpscare: "तुम्हें ढूँढ लिया"
+        jumpscare: "तुम्हें ढूँढ लिया",
+        episodeTitle: "एपिसोड १",
+        episodeSubtitle: "वो घर जो सांस लेता है",
+        finalMessage: "बुरा सपना अभी शुरू हुआ है...",
+        finalSubmessage: "सुबह के लिए प्रार्थना करें।",
+        script: [
+            { text: "यहाँ धूल की गंध आ रही है... और कुछ सड़ा हुआ।", type: 'mother', pitch: 1.2, rate: 0.8, pause: 2000, color: '#ffccaa', prefix: "माँ: " },
+            { text: "यह सालों से खाली है। बस इतना ही है।", type: 'father', pitch: 0.6, rate: 1.1, pause: 1500, color: '#aaaaff', prefix: "पिता: " },
+            { text: "पापा? यहाँ इतनी ठंड क्यों है?", type: 'child', pitch: 1.9, rate: 1.2, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "कोई खिड़की नहीं खुली है... मैंने चेक किया था।", type: 'mother', pitch: 1.4, rate: 1.3, volume: 0.9, pause: 1000, color: '#ffccaa', prefix: "माँ: " },
+            { text: "क्या घर अभी हिला?!", type: 'child', pitch: 2.0, rate: 1.5, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "यह बस... पुरानी लकड़ी है। शांत हो जाओ।", type: 'father', pitch: 0.7, rate: 0.9, pause: 2000, color: '#aaaaff', prefix: "पिता: " },
+            { text: "जाओ...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1000, color: '#888888', prefix: "अज्ञात: " },
+            { text: "क्या तुमने वह आवाज़ सुनी?! किसने कहा?!", type: 'mother', pitch: 1.6, rate: 1.6, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "माँ: " },
+            { text: "मैंने... मैंने कुछ नहीं सुना। मेरे पास रहो।", type: 'father', pitch: 0.8, rate: 1.3, pause: 2000, color: '#aaaaff', prefix: "पिता: " },
+            { text: "तुम यहाँ के नहीं हो...", type: 'ghost', pitch: 0.01, rate: 0.4, pause: 500, color: '#888888', prefix: "अज्ञात: " },
+            { text: "वह चाहता है कि हम चले जाएँ! कृपया!", type: 'child', pitch: 2.0, rate: 1.6, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "बच्चा: " },
+            { text: "इस घर में कोई है!!", type: 'mother', pitch: 1.7, rate: 1.5, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "माँ: " }
+        ]
     },
     te: {
+        landingTitle: "వారెన్ క్షుద్ర మ్యూజియం",
+        landingWarning: "హెచ్చరిక: వీక్షకుల విచక్షణ సూచించబడింది.",
+        landingSubwarning: "లైవ్ ఫీడ్‌లో పారానార్మల్ యాక్టివిటీ ఉంది.",
         loading: ["కనెక్ట్ అవుతోంది...", "పిలుస్తోంది...", "వెనక్కి చూడకు", "వాళ్ళు ఇక్కడే ఉన్నారు"],
         warning: "హెచ్చరిక: అత్యంత భయానక కంటెంట్",
         start: "ధైర్యం ఉంటే ప్రవేశించండి",
         cam: "యామ్ 04: ఆర్టిఫాక్ట్ రూమ్",
         spiritBox: ["నేను నిన్ను చూస్తున్నాను...", "వెనక్కి తిరుగు...", "నన్ను లోపలికి రానివ్వండి...", "పరుగెత్తు...", "దాక్కో..."],
-        jumpscare: "నిన్ను కనుగొన్నాను"
+        jumpscare: "నిన్ను కనుగొన్నాను",
+        episodeTitle: "ఎపిసోడ్ 1",
+        episodeSubtitle: "ఊపిరి పీల్చుకునే ఇల్లు",
+        finalMessage: "పీడకల ఇప్పుడే మొదలైంది...",
+        finalSubmessage: "ఉదయం కోసం ప్రార్థించండి.",
+        script: [
+            { text: "ఈ ప్రదేశం దుమ్ము వాసన వస్తోంది... మరియు ఏదో కుళ్ళిన వాసన.", type: 'mother', pitch: 1.2, rate: 0.8, pause: 2000, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "ఇది ఏళ్లుగా ఖాళీగా ఉంది. అంతే.", type: 'father', pitch: 0.6, rate: 1.1, pause: 1500, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "నాన్నా? ఇక్కడ ఎందుకు ఇంత చల్లగా ఉంది?", type: 'child', pitch: 1.9, rate: 1.2, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "కిటికీలు ఏవీ తెరవలేదు... నేను చూశాను.", type: 'mother', pitch: 1.4, rate: 1.3, volume: 0.9, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "ఇల్లు కదిలిందా?!", type: 'child', pitch: 2.0, rate: 1.5, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "ఇది కేవలం... పాత చెక్క. శాంతించు.", type: 'father', pitch: 0.7, rate: 0.9, pause: 2000, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "వెళ్ళండి...", type: 'ghost', pitch: 0.01, rate: 0.2, volume: 1.0, pause: 1000, color: '#888888', prefix: "తెలియదు: " },
+            { text: "ఆ స్వరం విన్నారా?! ఎవరు చెప్పారు?!", type: 'mother', pitch: 1.6, rate: 1.6, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " },
+            { text: "నేను... నాకేమీ వినిపించలేదు. నా దగ్గరే ఉండు.", type: 'father', pitch: 0.8, rate: 1.3, pause: 2000, color: '#aaaaff', prefix: "తండ్రి: " },
+            { text: "మీరు ఇక్కడికి సంబంధించిన వారు కాదు...", type: 'ghost', pitch: 0.01, rate: 0.4, pause: 500, color: '#888888', prefix: "తెలియదు: " },
+            { text: "మనం వెళ్లిపోవాలని ఆశిస్తోంది! దయచేసి!", type: 'child', pitch: 2.0, rate: 1.6, volume: 1.0, pause: 1500, color: '#ffff00', prefix: "పిల్లవాడు: " },
+            { text: "ఈ ఇంట్లో ఎవరో ఉన్నారు!!", type: 'mother', pitch: 1.7, rate: 1.5, volume: 1.0, pause: 1000, color: '#ffccaa', prefix: "తల్లి: " }
+        ]
     }
 };
 
@@ -40,20 +103,62 @@ class VoiceEngine {
         this.synth = window.speechSynthesis;
         this.voices = [];
         this.currentUtterance = null; // Prevent GC
+        this.voicesLoaded = false;
+
+        // Try loading immediately
         this.loadVoices();
+
+        // Fallback/Listener
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = () => this.loadVoices();
         }
     }
 
     loadVoices() {
-        this.voices = this.synth.getVoices();
+        const voices = this.synth.getVoices();
+        if (voices.length > 0) {
+            this.voices = voices;
+            this.voicesLoaded = true;
+            console.log(`VoiceEngine: Loaded ${voices.length} voices.`);
+        }
+    }
+
+    waitForVoices() {
+        return new Promise((resolve) => {
+            if (this.voicesLoaded) {
+                resolve();
+            } else {
+                // Check if they are already there but event didn't fire
+                this.loadVoices();
+                if (this.voicesLoaded) {
+                    resolve();
+                    return;
+                }
+
+                console.log("VoiceEngine: Waiting for voices...");
+                const checkInterval = setInterval(() => {
+                    this.loadVoices();
+                    if (this.voicesLoaded) {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }
+                }, 50);
+
+                // ULTRA FAST FALLBACK (100ms) - Don't block UI for audio
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    console.warn("VoiceEngine: Proceeding without waiting for full voice list.");
+                    resolve();
+                }, 100);
+            }
+        });
     }
 
     speak(text, lang, type = 'demon', params = {}, onEnd = null) {
         if (this.synth.speaking) this.synth.cancel();
 
         const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang; // Set the language
 
         // Apply voice characteristics based on type
         if (type === 'demon') {
@@ -96,32 +201,39 @@ class VoiceEngine {
             utter.rate = Math.max(0.1, Math.min(2, utter.rate));
         }
 
-        // Select Voice (try to find appropriate gender)
+        // Select Voice (try to find appropriate gender AND language)
         const voices = window.speechSynthesis.getVoices();
         let voice = null;
 
-        // Helper to find voice
+        // Filter by language first (Strict filter)
+        const langCode = lang.split('-')[0]; // 'hi', 'te', 'en'
+        const langVoices = voices.filter(v => v.lang.toLowerCase().startsWith(langCode));
+
+        // If we have voices for this language, pick from them
+        const pool = langVoices.length > 0 ? langVoices : voices;
+
+        console.log(`Voice Selection for ${lang}: found ${langVoices.length} voices.`);
+
+        // Helper to find voice in pool
         const findVoice = (keywords) => {
-            return voices.find(v => keywords.some(k => v.name.toLowerCase().includes(k.toLowerCase())));
+            return pool.find(v => keywords.some(k => v.name.toLowerCase().includes(k.toLowerCase())));
         };
 
         if (type === 'child' || type === 'mother' || type === 'ghost') {
             // Female voices - aggressive search
-            // Microsoft Zira, Google US English, Samantha, any "Female"
-            voice = findVoice(['Zira', 'Eva', 'Sara', 'Female', 'Google US English', 'Samantha']);
+            voice = findVoice(['Zira', 'Eva', 'Sara', 'Female', 'Google US English', 'Samantha', 'Hindi Female', 'Telugu Female']);
         } else {
             // Male voices
-            voice = findVoice(['David', 'Mark', 'Male', 'Google UK English Male']);
+            voice = findVoice(['David', 'Mark', 'Male', 'Google UK English Male', 'Hindi Male', 'Telugu Male']);
         }
 
-        // Fallback to first available if strict match fails, but try to respect the intended "gender" pool if possible
+        // Fallback to first available in the language pool
+        if (!voice && pool.length > 0) {
+            voice = pool[0];
+        }
+        // Last resort: any voice
         if (!voice && voices.length > 0) {
-            if (type === 'child' || type === 'mother' || type === 'ghost') {
-                // Try to find ANY voice with 'female' or 'woman' in name, otherwise just pick a higher pitched one if we could detect it (we can't easily), so default to first.
-                voice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'));
-            } else {
-                voice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man'));
-            }
+            voice = voices[0];
         }
 
         if (voice) utter.voice = voice;
@@ -155,7 +267,7 @@ class VoiceEngine {
         this.synth.speak(utter);
     }
 
-    speakSequence(lines, onComplete) {
+    speakSequence(lines, lang = 'en', onComplete) {
         let index = 0;
         const next = () => {
             if (index >= lines.length) {
@@ -172,7 +284,7 @@ class VoiceEngine {
             const jitter = (line.type === 'demon' || line.type === 'ghost') ? 0.1 : 0;
             const params = { ...line, jitter };
 
-            this.speak(line.text, 'en', line.type, params, () => {
+            this.speak(line.text, lang, line.type, params, () => {
                 if (line.onEnd) line.onEnd();
                 setTimeout(next, line.pause || 500);
             });
@@ -598,8 +710,52 @@ class TapeDeck {
     }
 
     // Placeholders
-    playPossession() { }
-    playExorcism() { }
+    playPossession() {
+        // Deep, distorted throat singing simulation
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(60, t);
+        osc.frequency.linearRampToValueAtTime(40, t + 2);
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(400, t);
+        filter.Q.value = 10;
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.4, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 2.5);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.masterGain);
+
+        osc.start(t);
+        osc.stop(t + 2.5);
+    }
+
+    playExorcism() {
+        // High pitched screetch (Latin chanting simulation)
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, t);
+        osc.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
+
+        const mod = this.ctx.createOscillator();
+        mod.frequency.value = 50; // Ring mod
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 1.0);
+
+        osc.connect(gain); // Simple connection
+        gain.connect(this.masterGain);
+
+        osc.start(t);
+        osc.stop(t + 1.0);
+    }
 }
 
 
@@ -721,7 +877,7 @@ class HybridEngine {
 
         // SUDDEN SCREAM AT START (Trauma Init)
         setTimeout(() => {
-            this.playBansheeScream();
+            if (this.tapeDeck) this.tapeDeck.playBansheeScream();
             // Flash red for impact
             document.body.style.backgroundColor = '#500';
             setTimeout(() => document.body.style.backgroundColor = '', 100);
@@ -832,33 +988,132 @@ class HybridEngine {
     }
 
     setLang(lang) {
+        console.log(`[Flow] setLang called with: ${lang}`);
         if (!CONFIG.languages.includes(lang)) return;
+
         this.currentLang = lang;
-        console.log(`Language set to: ${lang}`);
+        console.log(`[Flow] Language confirmed: ${lang}`);
 
-        // Update UI Text immediately
-        // (Simplified for now, in a full app we'd bind all text elements)
+        // 1. UPDATE UI IMMEDIATELY (Visuals First)
+        const texts = I18N[this.currentLang];
+        if (!texts) {
+            console.error("[Critical] Missing Translation Texts!");
+            return;
+        }
 
-        // Start if on landing page
+        // Landing Page
+        const landingTitle = document.getElementById('landing-title');
+        const landingWarning = document.getElementById('landing-warning');
+        const landingSub = document.getElementById('landing-subwarning');
+
+        if (landingTitle) landingTitle.innerText = texts.landingTitle;
+        if (landingWarning) landingWarning.innerText = texts.landingWarning;
+        if (landingSub) landingSub.innerText = texts.landingSubwarning;
+
+        // Cinematic Title Updates (Force update)
+        const epTitle = document.querySelector('#episode-title h1');
+        const epSubTitle = document.querySelector('#episode-title h2');
+        if (epTitle) {
+            epTitle.innerText = texts.episodeTitle;
+            epTitle.setAttribute('data-text', texts.episodeTitle);
+        }
+        if (epSubTitle) epSubTitle.innerText = texts.episodeSubtitle;
+
+        // Final Message Updates (Force update)
+        const finMsg = document.querySelector('#final-message h1');
+        const finSub = document.querySelector('#final-message p');
+        if (finMsg) {
+            finMsg.innerText = texts.finalMessage;
+            finMsg.setAttribute('data-text', texts.finalMessage);
+        }
+        if (finSub) finSub.innerText = texts.finalSubmessage;
+
+        // Loading Screen Update - Random Selection
+        const loadingText = document.getElementById('loading-text');
+        if (loadingText && texts.loading) {
+            const randomLoading = texts.loading[Math.floor(Math.random() * texts.loading.length)];
+            loadingText.innerText = randomLoading;
+        }
+
+        // 2. TRIGGER START SEQUENCE IMMEDIATELY
         const landing = document.getElementById('landing-page');
-        if (!landing.classList.contains('hidden')) {
-            this.tapeDeck.resume();
+        const isLandingVisible = landing && (getComputedStyle(landing).display !== 'none' && !landing.classList.contains('hidden'));
+
+        if (isLandingVisible) {
+            console.log("[Flow] User started from landing page. Initiating sequence.");
 
             // Inject Cinematic Effects
-            const grain = document.createElement('div');
-            grain.className = 'film-grain';
-            document.body.appendChild(grain);
+            if (!document.querySelector('.film-grain')) {
+                const grain = document.createElement('div');
+                grain.className = 'film-grain';
+                document.body.appendChild(grain);
+            }
+            if (!document.querySelector('.vignette')) {
+                const vignette = document.createElement('div');
+                vignette.className = 'vignette';
+                document.body.appendChild(vignette);
+            }
 
-            const vignette = document.createElement('div');
-            vignette.className = 'vignette';
-            document.body.appendChild(vignette);
+            // Audio Resume
+            this.tapeDeck.resume();
 
+            // Start Sequence directly
             this.startSequence();
         }
+
+        // 3. LOAD AUDIO ASYNC (Best Effort)
+        this.voiceEngine.waitForVoices().then(() => {
+            console.log(`[Flow] Audio engine ready for ${lang}`);
+        });
+    }
+
+    startSequence() {
+        console.log("[Flow] Starting Cinematic Sequence...");
+        const landing = document.getElementById('landing-page');
+        const title = document.getElementById('episode-title');
+
+        if (!title) {
+            console.error("[Critical] Episode Title Element Not Found!");
+            return;
+        }
+
+        // FORCE visibility with inline styles to override any CSS classes
+        title.style.cssText = "display: flex !important; opacity: 1 !important; z-index: 10000 !important;";
+        title.classList.remove('hidden');
+        title.classList.add('visible');
+
+        console.log("[Flow] Title visibility forced.");
+
+        // Safe cleanup of landing page
+        if (landing) {
+            setTimeout(() => {
+                landing.style.display = 'none';
+                landing.classList.add('hidden');
+                console.log("[Flow] Landing page hidden.");
+            }, 100);
+        }
+
+        // Play Intro Audio
+        this.tapeDeck.playScenario(1); // Haunted House
+
+        // 2. Transition to Loading Screen after title
+        setTimeout(() => {
+            title.classList.remove('visible');
+            title.classList.add('hidden'); // Ensure it hides
+            setTimeout(() => title.style.display = 'none', 2000);
+
+            document.getElementById('loading-screen').classList.remove('hidden');
+
+            // 3. Simulate Loading -> Start Feed
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                this.startMonitoring();
+            }, 5000); // Increased load time for tension
+
+        }, 6000); // Longer title duration (6s)
     }
 
     triggerConversation() {
-        // Stop random events but KEEP background noise
         this.isVideoActive = false;
         this.tapeDeck.resume(); // Ensure audio engine is running
         this.tapeDeck.playScenario(9); // Ensure Presence drone is active
@@ -878,161 +1133,120 @@ class HybridEngine {
             document.body.className = bgClass;
         };
 
-        const script = [
-            // SCENE: THE HOUSE THAT BREATHES
-            {
-                text: "This place smells like... dust. And something rotten.", type: 'mother',
-                pitch: 1.2, rate: 0.8, // Slow, sniffing, disgusted
-                pause: 2000,
-                onStart: () => {
+        const rawScript = I18N[this.currentLang].script;
+
+        // Map raw script to execution script with callbacks
+        const script = rawScript.map((line, index) => {
+            const item = { ...line };
+
+            // Assign specific callbacks based on index/context (Re-mapping logic)
+            // This preserves the original "Director" logic while using translated text
+
+            if (index === 0) { // Mother: Smells like dust
+                item.onStart = () => {
                     setScene("⚠ EXT. FARMHOUSE - DUSK ⚠", 'farmhouse-filter', 'bg-farmhouse');
                     this.tapeDeck.resume();
                     this.tapeDeck.playPresence();
-                    if (subUI) { subUI.innerText = "Mother: This place smells like... dust. And something rotten."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
-                },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
-            },
-            {
-                text: "It’s been empty for years. That’s all it is.", type: 'father',
-                pitch: 0.6, rate: 1.1, // Trying to be reassuring but rushed
-                pause: 1500,
-                onStart: () => {
-                    if (subUI) { subUI.innerText = "Father: It’s been empty for years. That’s all it is."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
-                },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
-            },
-            {
-                text: "Daddy? Why is it so cold in here?", type: 'child',
-                pitch: 1.9, rate: 1.2, volume: 1.0, // High pitch (fear), fast (shivering)
-                pause: 1500,
-                onStart: () => {
-                    // Transition to Interior
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 1) { // Father: Empty for years
+                item.onStart = () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 2) { // Child: Cold
+                item.onStart = () => {
                     setScene("⚠ INT. HALLWAY - NIGHT ⚠", 'farmhouse-filter', 'bg-hallway');
                     canvas.classList.add('shake-slow');
-                    if (subUI) { subUI.innerText = "Child: Daddy? Why is it so cold in here?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
-                },
-                onEnd: () => {
-                    if (subUI) subUI.classList.remove('visible');
-                    this.triggerParanormalEvent(); // Random scare
-                }
-            },
-            {
-                text: "There’s no windows open… I checked them.", type: 'mother',
-                pitch: 1.4, rate: 1.3, volume: 0.9, // Higher, faster (Panic setting in)
-                pause: 1000,
-                onStart: () => {
-                    if (subUI) { subUI.innerText = "Mother: There’s no windows open… I checked them."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
-                },
-                onEnd: () => {
-                    if (subUI) subUI.classList.remove('visible');
-                    this.tapeDeck.playCreak();
-                }
-            },
-            {
-                text: "Did the house just move?!", type: 'child',
-                pitch: 2.0, rate: 1.5, volume: 1.0, // Very high, very fast (Terror)
-                pause: 1500,
-                onStart: () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); this.triggerParanormalEvent(); };
+            }
+            else if (index === 3) { // Mother: No windows open
+                item.onStart = () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); this.tapeDeck.playCreak(); };
+            }
+            else if (index === 4) { // Child: House move
+                item.onStart = () => {
                     canvas.classList.add('shake-slow');
                     this.tapeDeck.playScenario(4); // Footsteps
-                    if (subUI) { subUI.innerText = "Child: Did the house just move?!"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
-                },
-                onEnd: () => {
-                    if (subUI) subUI.classList.remove('visible');
-                    this.triggerParanormalEvent(); // Trigger random event
-                }
-            },
-            {
-                text: "It's just... old wood settling. Calm down.", type: 'father',
-                pitch: 0.7, rate: 0.9, // Forcing calm, deep (hiding fear)
-                pause: 2000,
-                onStart: () => {
-                    this.tapeDeck.playCreak(); // Wood settling sound
-                    if (subUI) { subUI.innerText = "Father: It's just... old wood settling. Calm down."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
-                },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
-            },
-            {
-                text: "Goooo...", type: 'ghost',
-                pitch: 0.01, rate: 0.2, volume: 1.0, // Demonic Slow
-                pause: 1000,
-                onStart: () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); this.triggerParanormalEvent(); };
+            }
+            else if (index === 5) { // Father: Wood settling
+                item.onStart = () => {
+                    this.tapeDeck.playCreak();
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 6) { // Ghost: Goooo...
+                item.onStart = () => {
                     setScene("⚠ UNKNOWN FREQUENCY ⚠", 'invert', 'bg-hallway');
-                    this.tapeDeck.playScenario(8); // Whisper "Behind You"
-                    this.tapeDeck.playScenario(9); // Presence drone
-                    if (subUI) { subUI.innerText = "Unknown: Goooo..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; subUI.style.fontSize = '2rem'; }
-                },
-                onEnd: () => {
-                    // Keep the invert for a bit longer to be scary
+                    this.tapeDeck.playScenario(8); // Whisper
+                    this.tapeDeck.playScenario(9); // Presence
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; subUI.style.fontSize = '2rem'; }
+                };
+                item.onEnd = () => {
                     setTimeout(() => canvas.classList.remove('invert'), 500);
                     if (subUI) { subUI.classList.remove('visible'); subUI.style.fontSize = ''; }
-                }
-            },
-            {
-                text: "Did you hear that voice?! Who said that?!", type: 'mother',
-                pitch: 1.6, rate: 1.6, volume: 1.0, // Very High, Very Fast (Hysteria)
-                pause: 1000,
-                onStart: () => {
-                    this.tapeDeck.playScenario(2); // Clapping/Sharp noise to startle
-                    if (subUI) { subUI.innerText = "Mother: Did you hear that voice?! Who said that?!"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
-                },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
-            },
-            {
-                text: "I... I didn’t hear anything. Stay close to me.", type: 'father',
-                pitch: 0.8, rate: 1.3, // Voice cracking/breaking (Lying)
-                pause: 2000,
-                onStart: () => {
-                    canvas.classList.add('glitch'); // Visual glitch indicating a lie/reality break
-                    if (subUI) { subUI.innerText = "Father: I... I didn’t hear anything. Stay close to me."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
-                },
-                onEnd: () => {
-                    canvas.classList.remove('glitch');
-                    if (subUI) subUI.classList.remove('visible');
-                }
-            },
-            {
-                text: "You don’t belong...", type: 'ghost',
-                pitch: 0.01, rate: 0.4,
-                pause: 500,
-                onStart: () => {
+                };
+            }
+            else if (index === 7) { // Mother: Did you hear that
+                item.onStart = () => {
+                    this.tapeDeck.playScenario(2); // Clapping
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 8) { // Father: Didn't hear anything
+                item.onStart = () => {
+                    canvas.classList.add('glitch');
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { canvas.classList.remove('glitch'); if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 9) { // Ghost: Don't belong
+                item.onStart = () => {
                     setScene("⚠ SIGNAL INTRUSION ⚠", 'glitch-heavy', 'bg-hallway');
-                    this.tapeDeck.playScenario(5); // Demon Reveal Audio
-                    if (subUI) { subUI.innerText = "Unknown: You don’t belong..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; }
-                },
-                onEnd: () => {
+                    this.tapeDeck.playScenario(5); // Demon Reveal
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => {
                     canvas.classList.remove('glitch-heavy');
                     if (subUI) subUI.classList.remove('visible');
                     this.tapeDeck.playDoorSlam();
-                }
-            },
-            {
-                text: "It wants us to leave! PLEASE!", type: 'child',
-                pitch: 2.0, rate: 1.6, volume: 1.0, // Screaming/Sobbing
-                pause: 1500,
-                onStart: () => {
-                    if (subUI) { subUI.innerText = "Child: It wants us to leave! PLEASE!"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
-                },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
-            },
-            {
-                text: "SOMEONE IS INSIDE THIS HOUSE!!", type: 'mother',
-                pitch: 1.7, rate: 1.5, volume: 1.0, // Full Scream
-                pause: 1000,
-                onStart: () => {
-                    if (subUI) { subUI.innerText = "Mother: SOMEONE IS INSIDE THIS HOUSE!!"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
-                },
-                onEnd: () => {
+                };
+            }
+            else if (index === 10) { // Child: Wants us to leave
+                item.onStart = () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => { if (subUI) subUI.classList.remove('visible'); };
+            }
+            else if (index === 11) { // Mother: Someone inside
+                item.onStart = () => {
+                    if (subUI) { subUI.innerText = line.prefix + line.text; subUI.classList.add('visible'); subUI.style.color = line.color; }
+                };
+                item.onEnd = () => {
                     if (subUI) subUI.classList.remove('visible');
-                    // Reset body bg
                     document.body.className = '';
                     this.triggerJumpscare();
-                }
+                };
             }
-        ];
+
+            return item;
+        });
 
         console.log("Starting Episode 1...");
-        this.voiceEngine.speakSequence(script, () => {
+        // Pass currentLang to speakSequence so it knows which voice/accent to try to use
+        this.voiceEngine.speakSequence(script, this.currentLang, () => {
             console.log("Episode Ended. Terminating session in 10s...");
             setTimeout(() => {
                 this.terminateSession();
@@ -1041,25 +1255,57 @@ class HybridEngine {
     }
 
     terminateSession() {
-        // Cut everything
-        this.tapeDeck.suspend();
+        console.log("Terminating Session...");
+
+        // Cut Audio/Visuals
+        this.tapeDeck.suspend(); // Stop all current sounds
         this.scareActive = false;
+        this.isVideoActive = false;
 
-        // Go Black
-        document.body.innerHTML = '';
-        document.body.style.backgroundColor = 'black';
-        document.body.style.cursor = 'none';
+        // Hide UI Layer & Canvas
+        if (this.uiLayer) this.uiLayer.classList.add('hidden');
+        if (this.canvas) this.canvas.classList.remove('visible');
 
-        // Final Message
-        const msg = document.createElement('div');
-        msg.innerText = "CONNECTION LOST";
-        msg.style.color = '#330000';
-        msg.style.fontFamily = 'Courier New';
-        msg.style.position = 'absolute';
-        msg.style.top = '50%';
-        msg.style.left = '50%';
-        msg.style.transform = 'translate(-50%, -50%)';
-        document.body.appendChild(msg);
+        // Hide any active subtitles
+        const subUI = document.getElementById('subtitles');
+        if (subUI) subUI.classList.remove('visible');
+
+        // Show Final Message with 3D Effect
+        const finalMsg = document.getElementById('final-message');
+        if (finalMsg) {
+            console.log("[Flow] Showing Final Message...");
+            finalMsg.classList.remove('hidden');
+            finalMsg.classList.add('visible');
+
+            // FORCE visibility
+            finalMsg.style.cssText = "display: flex !important; opacity: 1 !important; z-index: 10000 !important;";
+
+            // Ensure data-text is set if not already (English fallback)
+            const h1 = finalMsg.querySelector('h1');
+            if (h1 && !h1.getAttribute('data-text')) {
+                h1.setAttribute('data-text', h1.innerText);
+            }
+        } else {
+            // Fallback if HTML is missing
+            document.body.innerHTML = '';
+            document.body.style.backgroundColor = 'black';
+            document.body.style.cursor = 'none';
+
+            const container = document.createElement('div');
+            container.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;";
+
+            const h1 = document.createElement('h1');
+            h1.innerText = "THE NIGHTMARE HAS ONLY BEGUN...";
+            h1.style.cssText = "font-family: 'Creepster', cursive; font-size: 3rem; color: #cc0000; text-shadow: 2px 2px #000; letter-spacing: 5px; margin-bottom: 20px;";
+
+            const p = document.createElement('p');
+            p.innerText = "PRAY FOR THE DAWN.";
+            p.style.cssText = "font-size: 1.5rem; color: #666; font-family: 'Courier New';";
+
+            container.appendChild(h1);
+            container.appendChild(p);
+            document.body.appendChild(container);
+        }
     }
 
     triggerJumpscare() {
