@@ -34,23 +34,24 @@ Every creak of the floorboards is distinct. Every shadow has depth. The **3D Bin
 ---
 
 ## 🩸 A̸N̵A̷T̶O̶M̸Y̵ ̴O̵F̷ ̵F̶E̶A̴R̶
+![Anatomy of Fear](assets/scare_5.png)
 
 ### 🔊 B̴i̵n̶a̷u̵r̸a̸l̶ ̴A̵u̸d̸i̷t̷o̸r̸y̷ ̶H̸a̸l̷l̷u̵c̶i̸n̸a̵t̴i̸o̸n̵s̷
 **Don't trust your ears.** The engine doesn't play MP3s. It synthesizes raw audio waves to mimic the frequency of dread.
 *   **Dynamic Soundscapes**: Industrial drones and infrasound frequencies that vibrate the very bones of the browser.
 *   **Spatial Audio**: Whispers that move behind your head. Footsteps that stop right when you listen for them.
 
-### 🎥 R̶e̷t̵i̸n̴a̷l̵ ̶B̴u̵r̸n̶ ̵(̷Z̶e̵r̶o̸-̶A̷s̴s̵e̴t̷ ̵V̸i̵s̸u̷a̷l̶s̸)̷
+### 🎥 R̶e̷t̵i̸n̴a̷l̵ ̶B̴u̵r̸n̶ ̵(̷Z̶e̵r̶o̸-̶A̷s̴s̴e̴t̷ ̵V̸i̵s̴u̷a̸l̶s̸)̷
 **Your screen is the medium.** The visuals are rendered natively using advanced CSS3, creating a "found footage" aesthetic that feels uncomfortably real.
 *   **The Neural Canvas**: A digital membrane that glitches, tears, and bleeds as the entity approaches.
 *   **Ken Burns Anxiety**: The camera doesn't just pan; it *searches*. Calculated movements that mimic a trembling hand holding a camera.
 
-### 🗣️ T̸h̵e̴ ̶V̸o̵i̵c̴e̷ ̵i̵n̶ ̶t̸h̶e̸ ̵M̵a̴c̵h̷i̵n̷e̶
+### 🗣️ T̸h̵e̴ ̶V̸o̵i̵c̴e̷ ̵i̵n̶ ̶t̸h̶e̸ ̵M̵a̴c̵h̷i̸n̷e̶
 **It speaks to you.** A custom `VoiceEngine` hijacks the browser's speech synthesis to deliver dialogue that trembles, screams, and breaks. This is not a recording. It is the machine screaming in real-time.
 
 ---
 
-## 🩸 G̸L̷I̵M̸P̶S̴E̷ ̶O̷F̶ ̵T̷H̸E̵ ̷A̶N̷O̵M̴A̸L̵Y̶
+## 🩸 G̸L̷I̵M̸P̶S̴E̷ ̶O̷F̶ ̵T̷H̵E̵ ̷A̶N̷O̵M̴A̸L̴Y̶
 
 > *RESTRICTED ARCHIVE: footage recovered from Camera 04...*
 
@@ -64,6 +65,7 @@ Every creak of the floorboards is distinct. Every shadow has depth. The **3D Bin
 ---
 
 ## 🛠️ T̴E̴C̵H̶N̴O̷L̷O̷G̷Y̵ ̵S̶T̷A̷C̷K̷
+![Technology Stack](assets/scare_15.png)
 
 This project was architected to run purely in the client, with **zero external dependencies**.
 
@@ -76,7 +78,8 @@ This project was architected to run purely in the client, with **zero external d
 
 ---
 
-## ⚠️ C̴L̷A̴S̴S̷I̵F̵I̵E̷D̴ ̵D̷E̴V̵E̵L̷O̷P̸M̷E̵N̶T̵ ̴L̷O̷G̷
+## ⚠️ C̴L̷A̴S̴S̷I̵F̵I̵E̷D̴ ̵D̷E̴V̵E̴L̷O̷P̸M̵E̷N̶T̵ ̴L̷O̷G̷
+![Development Log](assets/scare_20.png)
 
 ### **🛑 EXECUTED BY: ANTIGRAVITY AI**
 > **This project was constructed in collaboration with Google's Antigravity AI.**
@@ -90,7 +93,7 @@ This project was architected to run purely in the client, with **zero external d
 
 ---
 
-## 💀 S̷Y̵S̵T̵E̸M̵ ̵A̸C̵C̷E̶S̷S̶
+## 💀 S̷Y̵S̵T̵E̸M̵ ̵A̸C̵C̷E̶S̶S̶
 
 ### ⚠️ Prerequisite
 **Courage.** (And a modern browser. Chrome recommended for full binaural support).
@@ -108,6 +111,7 @@ This project was architected to run purely in the client, with **zero external d
 ---
 
 ## 📼 E̵P̵I̴S̶O̷D̵E̶ ̴1̵:̶ ̵T̶H̵E̷ ̶A̸R̴R̸I̶V̷A̷L̶
+![The Survival](assets/scare_8.png)
 **Subject: The Farmhouse**
 1.  **The Scent**: The digital air grows heavy.
 2.  **The Signal**: A frequency that shouldn't exist interrupts the feed.
