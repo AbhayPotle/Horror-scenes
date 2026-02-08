@@ -418,24 +418,55 @@ class TapeDeck {
         }, 1200);
     }
 
-    // 9. Presence (Cold Wind + Hum)
+    // 9. Presence (Cold Wind + Dissonant Hum)
     playPresence() {
-        // Low wind
+        // Layer 1: Low Wind (Pink Noise)
         const noise = this.ctx.createBufferSource();
-        noise.buffer = this.createNoise(5);
-        noise.loop = true; // CRITICAL: Loop the background drone
+        noise.buffer = this.createNoise(10); // Longer buffer for less repetition
+        noise.loop = true;
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(100, this.ctx.currentTime);
-        filter.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + 5);
+        filter.frequency.linearRampToValueAtTime(60, this.ctx.currentTime + 10); // Slow movement
 
-        const g = this.ctx.createGain();
-        g.gain.value = 0.5;
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.value = 0.4;
 
         noise.connect(filter);
-        filter.connect(g);
-        g.connect(this.masterGain);
+        filter.connect(noiseGain);
+        noiseGain.connect(this.masterGain);
         noise.start();
+
+        // Layer 2: The "Ghost" Drone (Dissonant Cluster)
+        const createDrone = (freq, detune) => {
+            const osc = this.ctx.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            osc.detune.value = detune; // Detuned for uneasiness
+            const g = this.ctx.createGain();
+            g.gain.value = 0.05; // Very subtle
+
+            // LFO for volume pulsing
+            const lfo = this.ctx.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = 0.1 + Math.random() * 0.2; // Slow pulse
+            const lfoGain = this.ctx.createGain();
+            lfoGain.gain.value = 0.02;
+
+            osc.connect(g);
+            lfo.connect(g.gain);
+            g.connect(this.masterGain);
+            osc.start();
+            lfo.start();
+            this.activeNodes.push(osc, lfo, g);
+        };
+
+        // Tritone Cluster (Scary interval)
+        createDrone(55, 0);   // A1
+        createDrone(77.78, 10); // D#2 (Tritone) -> The "Devil's Interval"
+        createDrone(55, 1200); // A2 (Octave)
+
+        this.activeNodes.push(noise, noiseGain);
     }
 
     // 10. Jumpscare (Orchestral Hit)
