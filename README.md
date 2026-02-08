@@ -6,11 +6,11 @@
 ![The House That Breathes Banner](assets/farmhouse_ext.png)
 
 ![Status](https://img.shields.io/badge/Status-LIVE_FEED-red?style=for-the-badge)
+![Deployment](https://img.shields.io/badge/Deployment-ACTIVE-brightgreen?style=for-the-badge&logo=github)
 ![Powered By](https://img.shields.io/badge/Powered%20By-ANTIGRAVITY%20AI-blueviolet?style=for-the-badge)
 ![Methodology](https://img.shields.io/badge/Methodology-VIBE%20CODING-ff0055?style=for-the-badge)
-![System](https://img.shields.io/badge/System-PULSE_ENGINE-black?style=for-the-badge)
-![Warning](https://img.shields.io/badge/Warning-RAPID_AUDIO_PATTERNS-yellow?style=for-the-badge)
 
+### 🔴 [ACCESS LIVE FEED (CLICK HERE)](https://abhaypotle.github.io/Horror-scenes/)
 <br>
 
 > # *"I̵t̷ ̴s̵t̴a̵r̸t̸s̵ ̵w̶i̵t̸h̵ ̸t̷h̴e̴ ̴s̸m̸e̵l̸l̸...̷ ̴t̷h̵e̵n̸ ̴t̵h̴e̶ ̷w̷a̷l̸l̸s̴ ̴b̷e̴g̷i̸n̵ ̸t̷o̸ ̸e̴x̶h̵a̴l̸e̵."*
