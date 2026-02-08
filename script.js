@@ -423,6 +423,7 @@ class TapeDeck {
         // Low wind
         const noise = this.ctx.createBufferSource();
         noise.buffer = this.createNoise(5);
+        noise.loop = true; // CRITICAL: Loop the background drone
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(100, this.ctx.currentTime);
