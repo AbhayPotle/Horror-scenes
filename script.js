@@ -365,25 +365,30 @@ class TapeDeck {
             this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
         } catch (e) {
             console.warn("TapeDeck: AudioContext init failed.", e);
+
+            // Helper for Mock AudioParam
+            const mockParam = () => ({
+                value: 0,
+                setValueAtTime: () => { },
+                linearRampToValueAtTime: () => { },
+                exponentialRampToValueAtTime: () => { },
+                cancelScheduledValues: () => { },
+                setTargetAtTime: () => { }
+            });
+
             // Mock context to prevent crashes downstream
             this.ctx = {
                 state: 'suspended',
                 resume: () => Promise.resolve(),
                 createGain: () => ({
-                    gain: {
-                        setValueAtTime: () => { },
-                        cancelScheduledValues: () => { },
-                        setTargetAtTime: () => { },
-                        linearRampToValueAtTime: () => { },
-                        exponentialRampToValueAtTime: () => { }
-                    },
+                    gain: mockParam(),
                     connect: () => { }
                 }),
                 createBuffer: () => ({ getChannelData: () => [] }),
                 createBufferSource: () => ({ connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { }, buffer: null, loop: false }),
-                createBiquadFilter: () => ({ connect: () => { }, frequency: { value: 0 }, Q: { value: 0 }, type: 'lowpass' }),
-                createOscillator: () => ({ connect: () => { }, start: () => { }, stop: () => { }, frequency: { value: 0 }, detune: { value: 0 }, type: 'sine' }),
-                createStereoPanner: () => ({ connect: () => { }, pan: { value: 0 } }),
+                createBiquadFilter: () => ({ connect: () => { }, frequency: mockParam(), Q: mockParam(), type: 'lowpass' }),
+                createOscillator: () => ({ connect: () => { }, start: () => { }, stop: () => { }, frequency: mockParam(), detune: mockParam(), type: 'sine' }),
+                createStereoPanner: () => ({ connect: () => { }, pan: mockParam() }),
                 destination: {},
                 currentTime: 0,
                 sampleRate: 44100
@@ -1202,9 +1207,10 @@ class HybridEngine {
 
         // 2. TRIGGER START SEQUENCE IMMEDIATELY
         const landing = document.getElementById('landing-page');
-        const isLandingVisible = landing && (getComputedStyle(landing).display !== 'none' && !landing.classList.contains('hidden'));
 
-        if (isLandingVisible) {
+        // RELAXED CHECK: If landing page exists, we start. 
+        // We assume if the user clicked the button, it was visible.
+        if (landing) {
             console.log("[Flow] User started from landing page. Initiating sequence.");
 
             // Inject Cinematic Effects
@@ -1220,7 +1226,7 @@ class HybridEngine {
             }
 
             // Audio Resume
-            this.tapeDeck.resume();
+            try { this.tapeDeck.resume(); } catch (e) { }
 
             // Start Sequence directly
             this.startSequence();

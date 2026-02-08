@@ -182,6 +182,7 @@ button:hover {
 .hidden {
     opacity: 0 !important;
     pointer-events: none;
+    display: none !important;
 }
 
 .visible {
