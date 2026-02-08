@@ -88,6 +88,13 @@
             <!-- Dialogue Subtitles -->
             <div id="subtitles" class="hidden"></div>
 
+            <!-- Audio Debug Overlay -->
+            <div id="audio-debug"
+                style="position:fixed; top:10px; left:10px; z-index:10000; background:rgba(0,0,0,0.8); color:#0f0; font-family:monospace; padding:5px; font-size:12px; pointer-events:none;">
+                Audio: <span id="debug-ctx">Init...</span><br>
+                Voices: <span id="debug-voices">0</span>
+            </div>
+
             <!-- Hidden Audio Test Controls (Dev Only) -->
             <div id="audio-controls"
                 style="display:none; position:fixed; bottom:10px; left:10px; z-index:100; opacity:0.5;">
@@ -113,7 +120,7 @@
             </audio>
         </div>
 
-        <script src="script.js?v=AUDIO_FIX_FINAL"></script>
+        <script src="script.js?v=AUDIO_DEBUG_V1"></script>
 </body>
 
 </html>

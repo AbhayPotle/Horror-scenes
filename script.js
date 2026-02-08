@@ -273,10 +273,19 @@ class VoiceEngine {
         console.log(`[VoiceEngine] Speaking: "${text.substring(0, 20)}..."`);
         console.log(`[VoiceEngine] FORCED DURATION: ${calculatedDuration}ms (CharTime: ${baseCharTime})`);
 
+        // DUCK AUDIO START
+        if (window.engine && window.engine.tapeDeck) {
+            window.engine.tapeDeck.duck(true);
+        }
+
         // The "Next" trigger is purely time-based now
         if (onEnd) {
             setTimeout(() => {
                 console.log("[VoiceEngine] Duration elapsed. Triggering next.");
+                // DUCK AUDIO END
+                if (window.engine && window.engine.tapeDeck) {
+                    window.engine.tapeDeck.duck(false);
+                }
                 onEnd();
             }, calculatedDuration);
         }
@@ -288,6 +297,10 @@ class VoiceEngine {
 
         utter.onerror = (e) => {
             this.currentUtterance = null;
+            // Ensure volume returns even on error
+            if (window.engine && window.engine.tapeDeck) {
+                window.engine.tapeDeck.duck(false);
+            }
         };
 
         // Delay speech slightly to ensure cancellation of previous audio processed
@@ -324,15 +337,24 @@ class VoiceEngine {
 
 class TapeDeck {
     constructor() {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.connect(this.ctx.destination);
-        this.masterGain.gain.setValueAtTime(0.7, this.ctx.currentTime);
+        this.ctx = null; // Lazy load
+        this.masterGain = null;
         this.activeNodes = [];
         this.unlocked = false;
     }
 
+    init() {
+        if (this.ctx) return;
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.connect(this.ctx.destination);
+        // LOWER DEFAULT VOLUME FOR BETTER BALANCE
+        this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    }
+
     resume() {
+        this.init(); // Ensure context exists
+
         if (this.ctx.state === 'suspended') {
             this.ctx.resume().then(() => {
                 console.log("AudioContext resumed successfully.");
@@ -350,6 +372,17 @@ class TapeDeck {
             console.log("AudioContext forced unlock (silent buffer played).");
             this.unlocked = true;
         }
+    }
+
+    // DUCK AUDIO (Lower volume when speaking)
+    duck(active) {
+        if (!this.ctx || !this.masterGain) return;
+
+        const now = this.ctx.currentTime;
+        const target = active ? 0.1 : 0.3; // Drop to 0.1 during speech, return to 0.3
+
+        this.masterGain.gain.cancelScheduledValues(now);
+        this.masterGain.gain.setTargetAtTime(target, now, 0.5); // Smooth transition
     }
 
     stopAll() {
@@ -941,6 +974,18 @@ class HybridEngine {
 
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
+
+        // DEBUG OVERLAY UPDATE LOOP
+        setInterval(() => {
+            const ctxState = this.tapeDeck && this.tapeDeck.ctx ? this.tapeDeck.ctx.state : "Not Init";
+            const voiceCount = window.speechSynthesis.getVoices().length;
+
+            const debugCtx = document.getElementById('debug-ctx');
+            const debugVoices = document.getElementById('debug-voices');
+
+            if (debugCtx) debugCtx.innerText = ctxState;
+            if (debugVoices) debugVoices.innerText = voiceCount;
+        }, 1000);
 
         // Show CCTV Feed
         this.canvas.classList.add('visible');
