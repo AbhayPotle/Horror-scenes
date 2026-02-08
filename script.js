@@ -975,18 +975,6 @@ class HybridEngine {
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
 
-        // DEBUG OVERLAY UPDATE LOOP
-        setInterval(() => {
-            const ctxState = this.tapeDeck && this.tapeDeck.ctx ? this.tapeDeck.ctx.state : "Not Init";
-            const voiceCount = window.speechSynthesis.getVoices().length;
-
-            const debugCtx = document.getElementById('debug-ctx');
-            const debugVoices = document.getElementById('debug-voices');
-
-            if (debugCtx) debugCtx.innerText = ctxState;
-            if (debugVoices) debugVoices.innerText = voiceCount;
-        }, 1000);
-
         // Show CCTV Feed
         this.canvas.classList.add('visible');
         this.isVideoActive = true;
