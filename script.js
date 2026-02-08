@@ -369,9 +369,21 @@ class TapeDeck {
             this.ctx = {
                 state: 'suspended',
                 resume: () => Promise.resolve(),
-                createGain: () => ({ gain: { setValueAtTime: () => { }, cancelScheduledValues: () => { }, setTargetAtTime: () => { } }, connect: () => { } }),
+                createGain: () => ({
+                    gain: {
+                        setValueAtTime: () => { },
+                        cancelScheduledValues: () => { },
+                        setTargetAtTime: () => { },
+                        linearRampToValueAtTime: () => { },
+                        exponentialRampToValueAtTime: () => { }
+                    },
+                    connect: () => { }
+                }),
                 createBuffer: () => ({ getChannelData: () => [] }),
-                createBufferSource: () => ({ connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { }, buffer: null }),
+                createBufferSource: () => ({ connect: () => { }, start: () => { }, stop: () => { }, disconnect: () => { }, buffer: null, loop: false }),
+                createBiquadFilter: () => ({ connect: () => { }, frequency: { value: 0 }, Q: { value: 0 }, type: 'lowpass' }),
+                createOscillator: () => ({ connect: () => { }, start: () => { }, stop: () => { }, frequency: { value: 0 }, detune: { value: 0 }, type: 'sine' }),
+                createStereoPanner: () => ({ connect: () => { }, pan: { value: 0 } }),
                 destination: {},
                 currentTime: 0,
                 sampleRate: 44100
