@@ -918,8 +918,33 @@ class HybridEngine {
 
         console.log("Starting Episode 1...");
         this.voiceEngine.speakSequence(script, () => {
-            console.log("Episode Ended.");
+            console.log("Episode Ended. Terminating session in 10s...");
+            setTimeout(() => {
+                this.terminateSession();
+            }, 10000);
         });
+    }
+
+    terminateSession() {
+        // Cut everything
+        this.tapeDeck.suspend();
+        this.scareActive = false;
+
+        // Go Black
+        document.body.innerHTML = '';
+        document.body.style.backgroundColor = 'black';
+        document.body.style.cursor = 'none';
+
+        // Final Message
+        const msg = document.createElement('div');
+        msg.innerText = "CONNECTION LOST";
+        msg.style.color = '#330000';
+        msg.style.fontFamily = 'Courier New';
+        msg.style.position = 'absolute';
+        msg.style.top = '50%';
+        msg.style.left = '50%';
+        msg.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(msg);
     }
 
     triggerJumpscare() {
