@@ -721,6 +721,7 @@ class HybridEngine {
                     }
 
                     this.ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                    this.ctx.filter = 'none'; // Reset to prevent bleeding into next frame
 
                     // Draw Ghost Box (Face Detection)
                     if (this.drawGhostBox) {
