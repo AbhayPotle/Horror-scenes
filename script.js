@@ -498,6 +498,56 @@ class TapeDeck {
         osc2.stop(t + 0.5);
     }
 
+    // 11. Banshee Scream (Sudden, High Pitch, Traumatizing)
+    playBansheeScream() {
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const t = this.ctx.currentTime;
+
+        // Ensure volume is UP
+        const master = this.masterGain.gain.value;
+        this.masterGain.gain.setValueAtTime(1.0, t); // FORCE LOUD
+
+        // 3 Layers of Screams
+        for (let i = 0; i < 3; i++) {
+            const osc = this.ctx.createOscillator();
+            osc.type = i % 2 === 0 ? 'sawtooth' : 'square';
+            // High pitch random start
+            osc.frequency.setValueAtTime(800 + Math.random() * 500, t);
+            // Slide UP rapidly (scream) then slightly down
+            osc.frequency.exponentialRampToValueAtTime(1500 + Math.random() * 1000, t + 0.1);
+            osc.frequency.exponentialRampToValueAtTime(1000, t + 1.5); // Sustain
+
+            osc.detune.value = (Math.random() - 0.5) * 1000; // Heavy dissonance
+
+            const g = this.ctx.createGain();
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(0.8, t + 0.05); // Attack fast
+            g.gain.exponentialRampToValueAtTime(0.01, t + 1.5); // Decay
+
+            // Add LFO for "Tremolo" (Shaking voice)
+            const lfo = this.ctx.createOscillator();
+            lfo.type = 'sine';
+            lfo.frequency.value = 15 + Math.random() * 10;
+            const lfoGain = this.ctx.createGain();
+            lfoGain.gain.value = 500; // Frequency modulation depth
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+
+            osc.connect(g);
+            g.connect(this.masterGain);
+
+            osc.start(t);
+            lfo.start(t);
+            osc.stop(t + 1.5);
+            lfo.stop(t + 1.5);
+        }
+
+        // Restore master volume after scream
+        setTimeout(() => {
+            this.masterGain.gain.linearRampToValueAtTime(master, this.ctx.currentTime + 1);
+        }, 1500);
+    }
+
     // 11. Floor Creak
     playCreak() {
         const osc = this.ctx.createOscillator();
@@ -655,6 +705,14 @@ class HybridEngine {
         this.canvas.classList.add('visible');
         this.isVideoActive = true;
         this.renderFeed();
+
+        // SUDDEN SCREAM AT START (Trauma Init)
+        setTimeout(() => {
+            this.playBansheeScream();
+            // Flash red for impact
+            document.body.style.backgroundColor = '#500';
+            setTimeout(() => document.body.style.backgroundColor = '', 100);
+        }, 1500); // 1.5s delay to catch them off guard
 
         // 3:07 AM Loop
         this.tapeDeck.playScenario(3); // 3:07 AM
@@ -1001,6 +1059,7 @@ class HybridEngine {
 
         // AUDIO (Demon Reveal + Screech)
         this.tapeDeck.playDemonReveal();
+        this.tapeDeck.playBansheeScream(); // SUDDEN END SCREAM
         this.voiceEngine.speak(I18N[this.currentLang].jumpscare, this.currentLang, 'demon');
 
         // VIDEO BLENDING LOOP (Code-Driven Hallucination)
