@@ -68,43 +68,59 @@
                 <div class="loader"></div>
                 <p>ESTABLISHING CONNECTION...</p>
                 <p class="console-text"></p>
+                <div id="loading-screen" class="hidden">
+                    <div class="loader"></div>
+                    <p>ESTABLISHING CONNECTION...</p>
+                    <p class="console-text"></p>
+                </div>
+
+                <!-- CINEMATIC: Episode Title -->
+                <div id="episode-title" class="hidden">
+                    <h1 class="blood-drip">EPISODE 1</h1>
+                    <h2 class="fade-in-delayed">THE HOUSE THAT BREATHES</h2>
+                </div>
+
+                <!-- CINEMATIC: Final Message -->
+                <div id="final-message" class="hidden">
+                    <h1 class="horror-text">THE NIGHTMARE HAS ONLY BEGUN...</h1>
+                    <p>PRAY FOR THE DAWN.</p>
+                </div>
+
+                <!-- Spirit Message Display -->
+                <div id="spirit-box-display" class="hidden"></div>
+
+                <!-- Dialogue Subtitles -->
+                <div id="subtitles" class="hidden"></div>
+
+                <!-- Hidden Audio Test Controls (Dev Only) -->
+                <div id="audio-controls"
+                    style="display:none; position:fixed; bottom:10px; left:10px; z-index:100; opacity:0.5;">
+                    <button onclick="engine.tapeDeck.playScenario(1)">1</button>
+                    <button onclick="engine.tapeDeck.playScenario(2)">2</button>
+                    <button onclick="engine.tapeDeck.playScenario(3)">3</button>
+                    <button onclick="engine.tapeDeck.playScenario(4)">4</button>
+                    <button onclick="engine.tapeDeck.playScenario(5)">5</button>
+                    <button onclick="engine.tapeDeck.playScenario(6)">6</button>
+                    <button onclick="engine.tapeDeck.playScenario(7)">7</button>
+                    <button onclick="engine.tapeDeck.playScenario(8)">8</button>
+                    <button onclick="engine.tapeDeck.playScenario(9)">9</button>
+                    <button onclick="engine.tapeDeck.playScenario(10)">10</button>
+                    <button style="color:red; border-color:red;" onclick="engine.triggerConversation()">TALK</button>
+                </div>
+
+
             </div>
 
-            <!-- Spirit Message Display -->
-            <div id="spirit-box-display" class="hidden"></div>
-
-            <!-- Dialogue Subtitles -->
-            <div id="subtitles" class="hidden"></div>
-
-            <!-- Hidden Audio Test Controls (Dev Only) -->
-            <div id="audio-controls"
-                style="display:none; position:fixed; bottom:10px; left:10px; z-index:100; opacity:0.5;">
-                <button onclick="engine.tapeDeck.playScenario(1)">1</button>
-                <button onclick="engine.tapeDeck.playScenario(2)">2</button>
-                <button onclick="engine.tapeDeck.playScenario(3)">3</button>
-                <button onclick="engine.tapeDeck.playScenario(4)">4</button>
-                <button onclick="engine.tapeDeck.playScenario(5)">5</button>
-                <button onclick="engine.tapeDeck.playScenario(6)">6</button>
-                <button onclick="engine.tapeDeck.playScenario(7)">7</button>
-                <button onclick="engine.tapeDeck.playScenario(8)">8</button>
-                <button onclick="engine.tapeDeck.playScenario(9)">9</button>
-                <button onclick="engine.tapeDeck.playScenario(10)">10</button>
-                <button style="color:red; border-color:red;" onclick="engine.triggerConversation()">TALK</button>
-            </div>
-
-
+            <!-- Audio Elements -->
+            <audio id="ambientSound" loop>
+                <!-- Placeholder for ambient sound -->
+            </audio>
+            <audio id="scareSound">
+                <!-- Placeholder for scare sound -->
+            </audio>
         </div>
 
-        <!-- Audio Elements -->
-        <audio id="ambientSound" loop>
-            <!-- Placeholder for ambient sound -->
-        </audio>
-        <audio id="scareSound">
-            <!-- Placeholder for scare sound -->
-        </audio>
-    </div>
-
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>

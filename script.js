@@ -686,16 +686,29 @@ class HybridEngine {
 
     startSequence() {
         document.getElementById('landing-page').classList.add('hidden');
-        document.getElementById('loading-screen').classList.remove('hidden');
+
+        // 1. Show Episode Title (Cinematic)
+        const title = document.getElementById('episode-title');
+        title.classList.add('visible');
+        title.style.display = 'flex'; // Ensure flex
 
         // Play Intro Audio
         this.tapeDeck.playScenario(1); // Haunted House
 
-        // Simulate Loading
+        // 2. Transition to Loading Screen after title
         setTimeout(() => {
-            document.getElementById('loading-screen').classList.add('hidden');
-            this.startMonitoring();
-        }, 3000);
+            title.classList.remove('visible');
+            setTimeout(() => title.style.display = 'none', 2000); // Hide after fade out
+
+            document.getElementById('loading-screen').classList.remove('hidden');
+
+            // 3. Simulate Loading -> Start Feed
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                this.startMonitoring();
+            }, 3000);
+
+        }, 4000); // 4 seconds of title display
     }
 
     startMonitoring() {
