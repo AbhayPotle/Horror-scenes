@@ -1042,6 +1042,7 @@ class HybridEngine {
 
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
+        document.querySelector('.monitor-overlay').classList.remove('hidden'); // Show HUD
 
         // GLOBAL AUDIO UNLOCK (Catch-all for mobile)
         const unlockAudio = () => {
@@ -1266,6 +1267,7 @@ class HybridEngine {
 
         // 1. Show Episode Title (Cinematic)
         const title = document.getElementById('episode-title');
+        title.classList.remove('hidden'); // Fix strict CSS override
         title.classList.add('visible');
         title.style.display = 'flex'; // Ensure flex
 
@@ -1436,8 +1438,10 @@ class HybridEngine {
         this.scareActive = false;
         this.isVideoActive = false;
 
-        // Hide UI Layer & Canvas
-        if (this.uiLayer) this.uiLayer.classList.add('hidden');
+        // Hide Monitor Overlay (keep UI layer active for final message)
+        const monitor = document.querySelector('.monitor-overlay');
+        if (monitor) monitor.classList.add('hidden');
+
         if (this.canvas) this.canvas.classList.remove('visible');
 
         // Hide any active subtitles
