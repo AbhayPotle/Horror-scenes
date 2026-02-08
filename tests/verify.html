@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horror Engine Verification</title>
+    <style>
+        body {
+            background: #111;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+        }
+
+        .pass {
+            color: #0f0;
+        }
+
+        .fail {
+            color: #f00;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #eb0;
+        }
+
+        #log {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>System Verification Protocol</h1>
+    <div id="log">Initializing diagnostics...</div>
+
+    <script>
+        const log = document.getElementById('log');
+        let passed = 0;
+        let failed = 0;
+        const totalChecks = 30; // 28 images + 2 system checks
+
+        function logMsg(msg, status) {
+            const el = document.createElement('div');
+            el.textContent = `[${status.toUpperCase()}] ${msg}`;
+            el.className = status;
+            log.appendChild(el);
+
+            if (status === 'pass') passed++;
+            if (status === 'fail') failed++;
+
+            window.scrollTo(0, document.body.scrollHeight);
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            if (passed + failed === totalChecks) {
+                const el = document.createElement('div');
+                el.innerHTML = `<br>DIAGNOSTICS COMPLETE.<br>PASSED: ${passed}<br>FAILED: ${failed}`;
+                el.style.borderTop = "1px solid #555";
+                el.style.marginTop = "10px";
+                log.appendChild(el);
+            }
+        }
+
+        // 1. Check AudioContext Support
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain(); // Needed for TapeDeck
+                const panner = ctx.createPanner(); // Needed for 3D Audio
+                if (osc && gain && panner) {
+                    logMsg("Web Audio API (Oscillator, Gain, Panner) supported.", "pass");
+                } else {
+                    logMsg("Web Audio API incomplete.", "fail");
+                }
+                ctx.close();
+            } else {
+                logMsg("Web Audio API not supported.", "fail");
+            }
+        } catch (e) {
+            logMsg(`Audio Check Error: ${e.message}`, "fail");
+        }
+
+        // 2. Check Canvas Support
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                logMsg("Canvas 2D Context supported.", "pass");
+            } else {
+                logMsg("Canvas 2D not supported.", "fail");
+            }
+        } catch (e) {
+            logMsg(`Canvas Check Error: ${e.message}`, "fail");
+        }
+
+        // 3. Check Image Assets (scare_1 to scare_34)
+        const assetsDir = '../assets'; // Relative to tests/ folder
+        for (let i = 1; i <= 28; i++) {
+            const imgName = `scare_${i}.png`;
+            const img = new Image();
+            img.onload = () => logMsg(`${imgName} loaded successfully (${img.width}x${img.height}).`, "pass");
+            img.onerror = () => logMsg(`${imgName} FAILED to load.`, "fail");
+            img.src = `${assetsDir}/${imgName}`;
+        }
+    </script>
+</body>
+
+</html>
