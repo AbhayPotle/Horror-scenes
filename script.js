@@ -154,6 +154,16 @@ class VoiceEngine {
         });
     }
 
+    unlock() {
+        if (this.synth.speaking) this.synth.cancel();
+        // Play a silent utterance to unlock the engine (iOS/Chrome requirement)
+        const utter = new SpeechSynthesisUtterance(" ");
+        utter.volume = 0;
+        utter.rate = 2.0;
+        this.synth.speak(utter);
+        console.log("[VoiceEngine] Unlocking speech synthesis...");
+    }
+
     speak(text, lang, type = 'demon', params = {}, onEnd = null) {
         if (this.synth.speaking) this.synth.cancel();
 
@@ -319,10 +329,27 @@ class TapeDeck {
         this.masterGain.connect(this.ctx.destination);
         this.masterGain.gain.setValueAtTime(0.7, this.ctx.currentTime);
         this.activeNodes = [];
+        this.unlocked = false;
     }
 
     resume() {
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume().then(() => {
+                console.log("AudioContext resumed successfully.");
+            });
+        }
+
+        // Force unlock for mobile/strict browsers
+        if (!this.unlocked) {
+            // Play silent buffer
+            const buffer = this.ctx.createBuffer(1, 1, 22050);
+            const source = this.ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.ctx.destination);
+            source.start(0);
+            console.log("AudioContext forced unlock (silent buffer played).");
+            this.unlocked = true;
+        }
     }
 
     stopAll() {
@@ -1035,6 +1062,10 @@ class HybridEngine {
     setLang(lang) {
         console.log(`[Flow] setLang called with: ${lang}`);
         if (!CONFIG.languages.includes(lang)) return;
+
+        // CRITICAL: Unlock Audio Context & TTS on User Gesture
+        this.tapeDeck.resume();
+        this.voiceEngine.unlock();
 
         this.currentLang = lang;
         console.log(`[Flow] Language confirmed: ${lang}`);
