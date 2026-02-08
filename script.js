@@ -742,9 +742,10 @@ class HybridEngine {
     }
 
     triggerConversation() {
-        // Stop random events and background noise
+        // Stop random events but KEEP background noise
         this.isVideoActive = false;
-        this.tapeDeck.suspend(); // Silence the hum
+        this.tapeDeck.resume(); // Ensure audio engine is running
+        this.tapeDeck.playScenario(9); // Ensure Presence drone is active
 
         // UI Elements
         const canvas = this.canvas;
