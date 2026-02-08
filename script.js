@@ -86,6 +86,15 @@ class VoiceEngine {
         if (params.rate) utter.rate = params.rate;
         if (params.volume) utter.volume = params.volume;
 
+        // Apply Jitter (Unstable Voice)
+        if (params.jitter) {
+            utter.pitch += (Math.random() * params.jitter) - (params.jitter / 2);
+            utter.rate += (Math.random() * params.jitter) - (params.jitter / 2);
+            // Cap limits
+            utter.pitch = Math.max(0.1, Math.min(2, utter.pitch));
+            utter.rate = Math.max(0.1, Math.min(2, utter.rate));
+        }
+
         // Select Voice (try to find appropriate gender)
         const voices = window.speechSynthesis.getVoices();
         let voice = null;
@@ -135,7 +144,10 @@ class VoiceEngine {
             if (line.onStart) line.onStart();
 
             // Speak (pass 'line' as params to capture manual pitch/rate overrides)
-            this.speak(line.text, 'en', line.type, line, () => {
+            const jitter = (line.type === 'demon' || line.type === 'ghost') ? 0.1 : 0;
+            const params = { ...line, jitter };
+
+            this.speak(line.text, 'en', line.type, params, () => {
                 if (line.onEnd) line.onEnd();
                 setTimeout(next, line.pause || 500);
             });

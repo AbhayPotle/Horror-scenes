@@ -195,27 +195,33 @@ button:hover {
 
 @keyframes glitch {
     0% {
-        transform: translate(0)
+        transform: translate(0);
+        text-shadow: 2px 0 #f00, -2px 0 #0ff;
     }
 
     20% {
-        transform: translate(-2px, 2px)
+        transform: translate(-2px, 2px);
+        text-shadow: -2px 0 #f00, 2px 0 #0ff;
     }
 
     40% {
-        transform: translate(-2px, -2px)
+        transform: translate(-2px, -2px);
+        text-shadow: 2px 0 #f00, -2px 0 #0ff;
     }
 
     60% {
-        transform: translate(2px, 2px)
+        transform: translate(2px, 2px);
+        text-shadow: -2px 0 #f00, 2px 0 #0ff;
     }
 
     80% {
-        transform: translate(2px, -2px)
+        transform: translate(2px, -2px);
+        text-shadow: 2px 0 #f00, -2px 0 #0ff;
     }
 
     100% {
-        transform: translate(0)
+        transform: translate(0);
+        text-shadow: none;
     }
 }
 
