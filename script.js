@@ -711,50 +711,89 @@ class TapeDeck {
 
     // Placeholders
     playPossession() {
-        // Deep, distorted throat singing simulation
+        // Deep, distorted throat singing simulation (Enhanced)
         const t = this.ctx.currentTime;
+
+        // 1. Throat Drone (Sawtooth with Low Pass)
         const osc = this.ctx.createOscillator();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(60, t);
-        osc.frequency.linearRampToValueAtTime(40, t + 2);
+        osc.frequency.setValueAtTime(55, t); // A1
+        osc.frequency.linearRampToValueAtTime(45, t + 3); // Slow drop
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(400, t);
-        filter.Q.value = 10;
+        filter.frequency.setValueAtTime(300, t);
+        filter.Q.value = 5;
+
+        // LFO for "Throat" texture (Guttural movement)
+        const lfo = this.ctx.createOscillator();
+        lfo.type = 'sine';
+        lfo.frequency.value = 8; // 8Hz flutter
+        const lfoGain = this.ctx.createGain();
+        lfoGain.gain.value = 100; // Filter modulation depth
+
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
 
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.4, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 2.5);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.6, t + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 4.0);
 
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(this.masterGain);
 
         osc.start(t);
-        osc.stop(t + 2.5);
+        lfo.start(t);
+        osc.stop(t + 4.0);
+        lfo.stop(t + 4.0);
+
+        // 2. Sub-Bass Rumble
+        const sub = this.ctx.createOscillator();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(30, t);
+        const subGain = this.ctx.createGain();
+        subGain.gain.setValueAtTime(0.4, t);
+        subGain.gain.linearRampToValueAtTime(0, t + 4.0);
+
+        sub.connect(subGain);
+        subGain.connect(this.masterGain);
+        sub.start(t);
+        sub.stop(t + 4.0);
     }
 
     playExorcism() {
-        // High pitched screetch (Latin chanting simulation)
+        // "Choir of the Damned" - Multiple dissonant screeches
         const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(800, t);
-        osc.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
+        const count = 3;
 
-        const mod = this.ctx.createOscillator();
-        mod.frequency.value = 50; // Ring mod
+        for (let i = 0; i < count; i++) {
+            const osc = this.ctx.createOscillator();
+            osc.type = i % 2 === 0 ? 'sawtooth' : 'square';
+            const startFreq = 800 + (Math.random() * 500);
+            osc.frequency.setValueAtTime(startFreq, t);
+            // Erratic pitch movement
+            osc.frequency.exponentialRampToValueAtTime(startFreq + 200, t + 0.1);
+            osc.frequency.exponentialRampToValueAtTime(startFreq - 100, t + 0.3);
+            osc.frequency.linearRampToValueAtTime(startFreq + 300 * (i + 1), t + 1.5);
 
-        const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.2, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 1.0);
+            const gain = this.ctx.createGain();
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.3 / count, t + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 1.5);
 
-        osc.connect(gain); // Simple connection
-        gain.connect(this.masterGain);
+            // Pan spread
+            const panner = this.ctx.createStereoPanner();
+            panner.pan.value = (Math.random() * 2) - 1;
 
-        osc.start(t);
-        osc.stop(t + 1.0);
+            osc.connect(gain);
+            gain.connect(panner);
+            panner.connect(this.masterGain);
+
+            osc.start(t);
+            osc.stop(t + 1.5);
+        }
     }
 }
 
@@ -840,32 +879,7 @@ class HybridEngine {
         }
     }
 
-    startSequence() {
-        document.getElementById('landing-page').classList.add('hidden');
 
-        // 1. Show Episode Title (Cinematic)
-        const title = document.getElementById('episode-title');
-        title.classList.add('visible');
-        title.style.display = 'flex'; // Ensure flex
-
-        // Play Intro Audio
-        this.tapeDeck.playScenario(1); // Haunted House
-
-        // 2. Transition to Loading Screen after title
-        setTimeout(() => {
-            title.classList.remove('visible');
-            setTimeout(() => title.style.display = 'none', 2000); // Hide after fade out
-
-            document.getElementById('loading-screen').classList.remove('hidden');
-
-            // 3. Simulate Loading -> Start Feed
-            setTimeout(() => {
-                document.getElementById('loading-screen').classList.add('hidden');
-                this.startMonitoring();
-            }, 3000);
-
-        }, 4000); // 4 seconds of title display
-    }
 
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
