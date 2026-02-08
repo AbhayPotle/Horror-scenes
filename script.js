@@ -61,8 +61,8 @@ class VoiceEngine {
             utter.rate = 0.8;
             utter.volume = 1.0;
         } else if (type === 'child') {
-            utter.pitch = 1.8;
-            utter.rate = 1.1;
+            utter.pitch = 2.2; // Higher base pitch to sound younger
+            utter.rate = 1.2;
             utter.volume = 0.8;
         } else if (type === 'whisper') {
             utter.pitch = 0.5;
@@ -106,21 +106,21 @@ class VoiceEngine {
         };
 
         if (type === 'child' || type === 'mother' || type === 'ghost') {
-            // Female voices
-            // "Zira" is standard Windows female, "Google US English" often female
-            voice = findVoice(['Zira', 'Female', 'Google US English', 'Samantha']);
+            // Female voices - aggressive search
+            // Microsoft Zira, Google US English, Samantha, any "Female"
+            voice = findVoice(['Zira', 'Eva', 'Sara', 'Female', 'Google US English', 'Samantha']);
         } else {
             // Male voices
-            // "David" or "Mark" are standard Windows male
             voice = findVoice(['David', 'Mark', 'Male', 'Google UK English Male']);
         }
 
         // Fallback to first available if strict match fails, but try to respect the intended "gender" pool if possible
-        if (!voice) {
+        if (!voice && voices.length > 0) {
             if (type === 'child' || type === 'mother' || type === 'ghost') {
-                voice = voices.find(v => v.name.includes('Female')) || voices[0];
+                // Try to find ANY voice with 'female' or 'woman' in name, otherwise just pick a higher pitched one if we could detect it (we can't easily), so default to first.
+                voice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'));
             } else {
-                voice = voices.find(v => v.name.includes('Male')) || voices[0];
+                voice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man'));
             }
         }
 
@@ -764,35 +764,35 @@ class HybridEngine {
         const script = [
             // SCENE: THE HOUSE THAT BREATHES
             {
-                text: "This place smells like dust and something rotten.", type: 'mother',
-                pitch: 1.1, rate: 0.8, // Slow, disgusted
+                text: "This place smells like... dust. And something rotten.", type: 'mother',
+                pitch: 1.2, rate: 0.8, // Slow, sniffing, disgusted
                 pause: 2000,
                 onStart: () => {
                     setScene("⚠ EXT. FARMHOUSE - DUSK ⚠", 'farmhouse-filter', 'bg-farmhouse');
                     this.tapeDeck.resume();
                     this.tapeDeck.playPresence();
-                    if (subUI) { subUI.innerText = "Mother: This place smells like dust and something rotten."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
+                    if (subUI) { subUI.innerText = "Mother: This place smells like... dust. And something rotten."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
             },
             {
-                text: "It’s been empty for years, that’s all.", type: 'father',
-                pitch: 0.6, rate: 1.0,
+                text: "It’s been empty for years. That’s all it is.", type: 'father',
+                pitch: 0.6, rate: 1.1, // Trying to be reassuring but rushed
                 pause: 1500,
                 onStart: () => {
-                    if (subUI) { subUI.innerText = "Father: It’s been empty for years, that’s all."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
+                    if (subUI) { subUI.innerText = "Father: It’s been empty for years. That’s all it is."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
             },
             {
-                text: "Why is it so cold in here?", type: 'child',
-                pitch: 1.8, rate: 1.1, // High pitch, slightly fast (Anxiety)
+                text: "Daddy? Why is it so cold in here?", type: 'child',
+                pitch: 1.9, rate: 1.2, volume: 1.0, // High pitch (fear), fast (shivering)
                 pause: 1500,
                 onStart: () => {
                     // Transition to Interior
                     setScene("⚠ INT. HALLWAY - NIGHT ⚠", 'farmhouse-filter', 'bg-hallway');
                     canvas.classList.add('shake-slow');
-                    if (subUI) { subUI.innerText = "Child: Why is it so cold in here?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
+                    if (subUI) { subUI.innerText = "Child: Daddy? Why is it so cold in here?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
                 },
                 onEnd: () => {
                     if (subUI) subUI.classList.remove('visible');
@@ -800,11 +800,11 @@ class HybridEngine {
                 }
             },
             {
-                text: "There’s no windows open…", type: 'mother',
-                pitch: 1.3, rate: 1.1, // Rising Panic
+                text: "There’s no windows open… I checked them.", type: 'mother',
+                pitch: 1.4, rate: 1.3, volume: 0.9, // Higher, faster (Panic setting in)
                 pause: 1000,
                 onStart: () => {
-                    if (subUI) { subUI.innerText = "Mother: There’s no windows open…"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
+                    if (subUI) { subUI.innerText = "Mother: There’s no windows open… I checked them."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
                 },
                 onEnd: () => {
                     if (subUI) subUI.classList.remove('visible');
@@ -812,13 +812,13 @@ class HybridEngine {
                 }
             },
             {
-                text: "Did the house just move?", type: 'child',
-                pitch: 1.9, rate: 1.3, // Fast/Scared
+                text: "Did the house just move?!", type: 'child',
+                pitch: 2.0, rate: 1.5, volume: 1.0, // Very high, very fast (Terror)
                 pause: 1500,
                 onStart: () => {
                     canvas.classList.add('shake-slow');
                     this.tapeDeck.playScenario(4); // Footsteps
-                    if (subUI) { subUI.innerText = "Child: Did the house just move?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
+                    if (subUI) { subUI.innerText = "Child: Did the house just move?!"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
                 },
                 onEnd: () => {
                     if (subUI) subUI.classList.remove('visible');
@@ -826,24 +826,24 @@ class HybridEngine {
                 }
             },
             {
-                text: "Old wood settles.", type: 'father',
-                pitch: 0.5, rate: 0.9,
+                text: "It's just... old wood settling. Calm down.", type: 'father',
+                pitch: 0.7, rate: 0.9, // Forcing calm, deep (hiding fear)
                 pause: 2000,
                 onStart: () => {
                     this.tapeDeck.playCreak(); // Wood settling sound
-                    if (subUI) { subUI.innerText = "Father: Old wood settles."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
+                    if (subUI) { subUI.innerText = "Father: It's just... old wood settling. Calm down."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
             },
             {
-                text: "Go...", type: 'ghost',
+                text: "Goooo...", type: 'ghost',
                 pitch: 0.01, rate: 0.2, volume: 1.0, // Demonic Slow
                 pause: 1000,
                 onStart: () => {
                     setScene("⚠ UNKNOWN FREQUENCY ⚠", 'invert', 'bg-hallway');
                     this.tapeDeck.playScenario(8); // Whisper "Behind You"
                     this.tapeDeck.playScenario(9); // Presence drone
-                    if (subUI) { subUI.innerText = "Unknown: Go..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; subUI.style.fontSize = '2rem'; }
+                    if (subUI) { subUI.innerText = "Unknown: Goooo..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; subUI.style.fontSize = '2rem'; }
                 },
                 onEnd: () => {
                     // Keep the invert for a bit longer to be scary
@@ -852,22 +852,22 @@ class HybridEngine {
                 }
             },
             {
-                text: "Did you hear that voice?", type: 'mother',
-                pitch: 1.5, rate: 1.4, // High Panic
+                text: "Did you hear that voice?! Who said that?!", type: 'mother',
+                pitch: 1.6, rate: 1.6, volume: 1.0, // Very High, Very Fast (Hysteria)
                 pause: 1000,
                 onStart: () => {
                     this.tapeDeck.playScenario(2); // Clapping/Sharp noise to startle
-                    if (subUI) { subUI.innerText = "Mother: Did you hear that voice?"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
+                    if (subUI) { subUI.innerText = "Mother: Did you hear that voice?! Who said that?!"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
             },
             {
-                text: "I didn’t hear anything.", type: 'father',
-                pitch: 0.6, rate: 1.2, // Rushed/Lying (Nervous)
+                text: "I... I didn’t hear anything. Stay close to me.", type: 'father',
+                pitch: 0.8, rate: 1.3, // Voice cracking/breaking (Lying)
                 pause: 2000,
                 onStart: () => {
                     canvas.classList.add('glitch'); // Visual glitch indicating a lie/reality break
-                    if (subUI) { subUI.innerText = "Father: I didn’t hear anything."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
+                    if (subUI) { subUI.innerText = "Father: I... I didn’t hear anything. Stay close to me."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
                 },
                 onEnd: () => {
                     canvas.classList.remove('glitch');
@@ -890,20 +890,20 @@ class HybridEngine {
                 }
             },
             {
-                text: "It doesn’t want us here.", type: 'child',
-                pitch: 1.9, rate: 0.5, // Crying/Slow (Sobbing)
+                text: "It wants us to leave! PLEASE!", type: 'child',
+                pitch: 2.0, rate: 1.6, volume: 1.0, // Screaming/Sobbing
                 pause: 1500,
                 onStart: () => {
-                    if (subUI) { subUI.innerText = "Child: It doesn’t want us here."; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
+                    if (subUI) { subUI.innerText = "Child: It wants us to leave! PLEASE!"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
             },
             {
-                text: "Someone is inside this house.", type: 'mother',
-                pitch: 1.3, rate: 0.6, // Terrified Whisper (Slow rate + high pitch = whispered fear)
+                text: "SOMEONE IS INSIDE THIS HOUSE!!", type: 'mother',
+                pitch: 1.7, rate: 1.5, volume: 1.0, // Full Scream
                 pause: 1000,
                 onStart: () => {
-                    if (subUI) { subUI.innerText = "Mother: Someone is inside this house."; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
+                    if (subUI) { subUI.innerText = "Mother: SOMEONE IS INSIDE THIS HOUSE!!"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
                 },
                 onEnd: () => {
                     if (subUI) subUI.classList.remove('visible');
