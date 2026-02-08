@@ -39,6 +39,7 @@ class VoiceEngine {
     constructor() {
         this.synth = window.speechSynthesis;
         this.voices = [];
+        this.currentUtterance = null; // Prevent GC
         this.loadVoices();
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = () => this.loadVoices();
@@ -124,9 +125,33 @@ class VoiceEngine {
         }
 
         if (voice) utter.voice = voice;
-        // console.log(`Selected voice for ${type}: ${voice ? voice.name : 'default'}`);
 
-        utter.onend = () => { if (onEnd) onEnd(); };
+        // CRITICAL FIX: Keep reference to prevent Garbage Collection
+        this.currentUtterance = utter;
+
+        // Safety Timeout (in case onend never fires)
+        const estimatedDuration = (text.length / 5) * 1000; // Rough estimate
+        const safetyTimer = setTimeout(() => {
+            if (this.currentUtterance === utter) {
+                console.warn("VoiceEngine: Safety Timeout Triggered");
+                if (onEnd) onEnd();
+                this.currentUtterance = null;
+            }
+        }, estimatedDuration + 5000); // 5s buffer
+
+        utter.onend = () => {
+            clearTimeout(safetyTimer);
+            if (onEnd) onEnd();
+            this.currentUtterance = null;
+        };
+
+        utter.onerror = (e) => {
+            console.error("VoiceEngine Error:", e);
+            clearTimeout(safetyTimer);
+            if (onEnd) onEnd();
+            this.currentUtterance = null;
+        };
+
         this.synth.speak(utter);
     }
 
@@ -792,15 +817,20 @@ class HybridEngine {
                 pause: 1500,
                 onStart: () => {
                     canvas.classList.add('shake-slow');
+                    this.tapeDeck.playScenario(4); // Footsteps
                     if (subUI) { subUI.innerText = "Child: Did the house just move?"; subUI.classList.add('visible'); subUI.style.color = '#ffff00'; }
                 },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
+                onEnd: () => {
+                    if (subUI) subUI.classList.remove('visible');
+                    this.triggerParanormalEvent(); // Trigger random event
+                }
             },
             {
                 text: "Old wood settles.", type: 'father',
                 pitch: 0.5, rate: 0.9,
                 pause: 2000,
                 onStart: () => {
+                    this.tapeDeck.playCreak(); // Wood settling sound
                     if (subUI) { subUI.innerText = "Father: Old wood settles."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
@@ -811,7 +841,8 @@ class HybridEngine {
                 pause: 1000,
                 onStart: () => {
                     setScene("⚠ UNKNOWN FREQUENCY ⚠", 'invert', 'bg-hallway');
-                    this.tapeDeck.playScenario(8);
+                    this.tapeDeck.playScenario(8); // Whisper "Behind You"
+                    this.tapeDeck.playScenario(9); // Presence drone
                     if (subUI) { subUI.innerText = "Unknown: Go..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; subUI.style.fontSize = '2rem'; }
                 },
                 onEnd: () => {
@@ -825,6 +856,7 @@ class HybridEngine {
                 pitch: 1.5, rate: 1.4, // High Panic
                 pause: 1000,
                 onStart: () => {
+                    this.tapeDeck.playScenario(2); // Clapping/Sharp noise to startle
                     if (subUI) { subUI.innerText = "Mother: Did you hear that voice?"; subUI.classList.add('visible'); subUI.style.color = '#ffccaa'; }
                 },
                 onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
@@ -834,9 +866,13 @@ class HybridEngine {
                 pitch: 0.6, rate: 1.2, // Rushed/Lying (Nervous)
                 pause: 2000,
                 onStart: () => {
+                    canvas.classList.add('glitch'); // Visual glitch indicating a lie/reality break
                     if (subUI) { subUI.innerText = "Father: I didn’t hear anything."; subUI.classList.add('visible'); subUI.style.color = '#aaaaff'; }
                 },
-                onEnd: () => { if (subUI) subUI.classList.remove('visible'); }
+                onEnd: () => {
+                    canvas.classList.remove('glitch');
+                    if (subUI) subUI.classList.remove('visible');
+                }
             },
             {
                 text: "You don’t belong...", type: 'ghost',
@@ -844,6 +880,7 @@ class HybridEngine {
                 pause: 500,
                 onStart: () => {
                     setScene("⚠ SIGNAL INTRUSION ⚠", 'glitch-heavy', 'bg-hallway');
+                    this.tapeDeck.playScenario(5); // Demon Reveal Audio
                     if (subUI) { subUI.innerText = "Unknown: You don’t belong..."; subUI.classList.add('visible'); subUI.style.color = '#888888'; }
                 },
                 onEnd: () => {
@@ -895,33 +932,49 @@ class HybridEngine {
         this.tapeDeck.playDemonReveal();
         this.voiceEngine.speak(I18N[this.currentLang].jumpscare, this.currentLang, 'demon');
 
-        // VIDEO BLENDING LOOP (Stop Motion)
+        // VIDEO BLENDING LOOP (Code-Driven Hallucination)
         let frame = 0;
         const loop = () => {
             if (!this.scareActive) return;
 
-            // Clear
-            this.ctx.fillStyle = 'rgba(0,0,0,0.1)'; // Trails
+            // 1. Harsh Clearing (Trailing effect)
+            this.ctx.fillStyle = `rgba(${Math.random() * 20},0,0,0.2)`;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Draw Next Image (Cycle through 28 images)
+            // 2. GLITCH ALGORITHM
             const img = this.scareImages[frame % this.scareImages.length];
             if (img && img.complete) {
-                // Jitter
-                const dx = (Math.random() - 0.5) * 50;
-                const dy = (Math.random() - 0.5) * 50;
+                // Randomize Layout
+                const scale = Math.max(this.canvas.width / img.width, this.canvas.height / img.height) * (1 + Math.random() * 0.2);
+                const x = (this.canvas.width / 2) - (img.width / 2) * scale + (Math.random() - 0.5) * 100;
+                const y = (this.canvas.height / 2) - (img.height / 2) * scale + (Math.random() - 0.5) * 100;
 
-                // Scale to cover
-                const scale = Math.max(this.canvas.width / img.width, this.canvas.height / img.height);
-                const x = (this.canvas.width / 2) - (img.width / 2) * scale + dx;
-                const y = (this.canvas.height / 2) - (img.height / 2) * scale + dy;
+                // Blend Modes (The "Hallucination")
+                const blends = ['source-over', 'difference', 'exclusion', 'hard-light', 'luminosity'];
+                this.ctx.globalCompositeOperation = blends[Math.floor(Math.random() * blends.length)];
 
-                // Blend Mode
-                this.ctx.globalCompositeOperation = 'lighten';
+                // Color Channel Split (Red/Blue offset)
+                if (Math.random() > 0.5) {
+                    this.ctx.drawImage(img, x + 10, y, img.width * scale, img.height * scale);
+                    this.ctx.globalCompositeOperation = 'source-over';
+                    this.ctx.globalAlpha = 0.5;
+                }
+
                 this.ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                this.ctx.globalAlpha = 1.0;
+                this.ctx.globalCompositeOperation = 'source-over';
+
+                // 3. Digital Noise overlay
+                if (Math.random() > 0.8) {
+                    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                    // Simple noise injection would be too slow here, rely on CSS 'film-grain' instead
+                    this.canvas.style.filter = `invert(${Math.random()}) contrast(${1 + Math.random()})`;
+                } else {
+                    this.canvas.style.filter = 'none';
+                }
             }
 
-            frame = (frame + 1 + Math.floor(Math.random() * 5)); // Skid frames
+            frame = (frame + 1 + Math.floor(Math.random() * 3)); // Rapid cycling
 
             requestAnimationFrame(loop);
         };
@@ -931,10 +984,11 @@ class HybridEngine {
         setTimeout(() => {
             this.scareActive = false;
             this.canvas.classList.remove('glitch');
+            this.canvas.style.filter = 'none';
             // Resume normal feed
             this.isVideoActive = true;
             this.renderFeed();
-        }, 2500);
+        }, 3000); // Extended scare duration
     }
 
     triggerParanormalEvent() {
