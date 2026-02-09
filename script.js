@@ -1042,7 +1042,7 @@ class HybridEngine {
 
     startMonitoring() {
         this.uiLayer.classList.remove('hidden');
-        document.querySelector('.monitor-overlay').classList.remove('hidden'); // Show HUD
+        document.querySelector('.monitor-overlay').style.display = 'flex'; // Show HUD explicitly
 
         // GLOBAL AUDIO UNLOCK (Catch-all for mobile)
         const unlockAudio = () => {
@@ -1440,7 +1440,7 @@ class HybridEngine {
 
         // Hide Monitor Overlay (keep UI layer active for final message)
         const monitor = document.querySelector('.monitor-overlay');
-        if (monitor) monitor.classList.add('hidden');
+        if (monitor) monitor.style.display = 'none';
 
         if (this.canvas) this.canvas.classList.remove('visible');
 
