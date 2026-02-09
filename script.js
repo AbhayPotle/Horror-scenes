@@ -1274,6 +1274,15 @@ class HybridEngine {
         // Play Intro Audio
         this.tapeDeck.playScenario(1); // Haunted House
 
+        // SAFETY TIMEOUT: Ensure we never get stuck on loading screen
+        setTimeout(() => {
+            if (!this.isVideoActive) {
+                console.warn("Script: Force starting monitoring (Safety Timeout)");
+                document.getElementById('loading-screen').classList.add('hidden');
+                this.startMonitoring();
+            }
+        }, 8000);
+
         // 2. Transition to Loading Screen after title
         setTimeout(() => {
             title.classList.remove('visible');
@@ -1286,7 +1295,7 @@ class HybridEngine {
                 document.getElementById('loading-screen').classList.add('hidden');
                 this.startMonitoring();
             }, 3000);
-        }, 4000); // 4 seconds of title display (User modification)
+        }, 4000); // 4 seconds of title display
     }
 
     triggerConversation() {
