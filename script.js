@@ -744,9 +744,15 @@ class TapeDeck {
     }
 
     resume() {
+        console.log("TapeDeck.resume() called");
         this.init();
-        if (this.ctx.state === "suspended")
-            this.ctx.resume().catch((e) => console.warn(e));
+        console.log("TapeDeck AudioContext state:", this.ctx.state);
+
+        if (this.ctx.state === "suspended") {
+            this.ctx.resume().then(() => {
+                console.log("AudioContext resumed successfully, new state:", this.ctx.state);
+            }).catch((e) => console.warn("AudioContext resume failed:", e));
+        }
 
         if (!this.unlocked) {
             try {
@@ -756,7 +762,10 @@ class TapeDeck {
                 source.connect(this.ctx.destination);
                 source.start(0);
                 this.unlocked = true;
-            } catch (e) { }
+                console.log("TapeDeck unlocked with silent buffer");
+            } catch (e) {
+                console.warn("TapeDeck unlock failed:", e);
+            }
         }
     }
 
@@ -890,12 +899,16 @@ class TapeDeck {
     }
 
     playScenario(id) {
+        console.log("playScenario called with id:", id);
         this.resume();
+        console.log("AudioContext state after resume:", this.ctx.state);
         switch (id) {
             case 1:
+                console.log("Playing HauntedHouse...");
                 this.playHauntedHouse();
                 break;
             case 2:
+                console.log("Playing Clapping...");
                 this.playClapping();
                 break;
             case 3:
@@ -1340,11 +1353,18 @@ class HybridEngine {
     }
 
     setLang(lang) {
+        console.log("setLang called with:", lang);
         if (!CONFIG.languages.includes(lang)) return;
+
+        // AGGRESSIVE AUDIO UNLOCK
         try {
+            console.log("Attempting to unlock audio...");
             this.tapeDeck.resume();
             this.voiceEngine.unlock();
-        } catch (e) { }
+            console.log("Audio unlock attempted");
+        } catch (e) {
+            console.error("Audio unlock failed:", e);
+        }
         this.currentLang = lang;
 
         const texts = I18N[this.currentLang];
