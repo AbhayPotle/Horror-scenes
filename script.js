@@ -1271,17 +1271,29 @@ class HybridEngine {
         title.classList.add('visible');
         title.style.display = 'flex'; // Ensure flex
 
-        // Play Intro Audio
-        this.tapeDeck.playScenario(1); // Haunted House
-
-        // SAFETY TIMEOUT: Ensure we never get stuck on loading screen
+        // SAFETY TIMEOUT: Ensure we never get stuck on loading screen OR title
         setTimeout(() => {
             if (!this.isVideoActive) {
                 console.warn("Script: Force starting monitoring (Safety Timeout)");
                 document.getElementById('loading-screen').classList.add('hidden');
+
+                // Force hide title if still visible
+                const title = document.getElementById('episode-title');
+                if (title) {
+                    title.classList.remove('visible');
+                    title.style.display = 'none';
+                }
+
                 this.startMonitoring();
             }
         }, 8000);
+
+        // Play Intro Audio (Safeguarded)
+        try {
+            this.tapeDeck.playScenario(1); // Haunted House
+        } catch (e) {
+            console.error("Audio failed, proceeding:", e);
+        }
 
         // 2. Transition to Loading Screen after title
         setTimeout(() => {
