@@ -1170,9 +1170,7 @@ class TapeDeck {
         osc.stop(this.ctx.currentTime + 1);
     }
 
-    suspend() {
-        if (this.ctx.state === "running") this.ctx.suspend();
-    }
+    // suspend method is defined above (after stopAll)
 }
 
 class HybridEngine {
@@ -1187,14 +1185,17 @@ class HybridEngine {
         this.voiceEngine = new VoiceEngine();
 
         this.scareImages = [];
+        this.farmhouseImages = [];
         this.loadedImagesCount = 0;
         this.timeOffset = 0;
+        this.isConversationActive = false;
         this.preloadImages();
 
         this.initUI();
     }
 
     preloadImages() {
+        // Load scare images (for non-conversation scenes)
         for (let i = 1; i <= CONFIG.totalImages; i++) {
             const img = new Image();
             img.src = `assets/scare_${i}.png`;
@@ -1204,6 +1205,14 @@ class HybridEngine {
             };
             this.scareImages.push(img);
         }
+        // Load farmhouse images (for conversation scenes)
+        const farmhouseFiles = ['farmhouse_ext.png', 'farmhouse_int.png'];
+        farmhouseFiles.forEach(file => {
+            const img = new Image();
+            img.src = `assets/${file}`;
+            img.onload = () => console.log(`Loaded ${file}`);
+            this.farmhouseImages.push(img);
+        });
     }
 
     initUI() {
@@ -1299,9 +1308,17 @@ class HybridEngine {
             this.ctx.fillStyle = "#050505";
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            if (this.scareImages.length > 0) {
+            // Choose image set based on conversation state
+            const imagePool = this.isConversationActive && this.farmhouseImages.length > 0
+                ? this.farmhouseImages
+                : this.scareImages;
+
+            if (imagePool.length > 0) {
                 const rand = Math.random();
-                if (rand > 0.98) {
+                if (this.isConversationActive) {
+                    // Calmer, moodier filter during conversation
+                    this.ctx.filter = "contrast(1.1) brightness(0.7) sepia(0.3)";
+                } else if (rand > 0.98) {
                     this.ctx.filter = "contrast(2.0) saturate(0) invert(1)";
                 } else if (rand > 0.95) {
                     this.ctx.filter = "sepia(0.8) contrast(1.2) brightness(0.8)";
@@ -1312,9 +1329,10 @@ class HybridEngine {
                 }
 
                 const adjustedTime = now + this.timeOffset;
-                const frameIndex =
-                    Math.floor(adjustedTime / 100) % this.scareImages.length;
-                const img = this.scareImages[frameIndex];
+                // During conversation, change images slowly (every 5s); otherwise fast
+                const frameSpeed = this.isConversationActive ? 5000 : 100;
+                const frameIndex = Math.floor(adjustedTime / frameSpeed) % imagePool.length;
+                const img = imagePool[frameIndex];
 
                 if (img && img.complete) {
                     const scale = Math.max(
@@ -1472,6 +1490,7 @@ class HybridEngine {
     // NOTE: Simplified conversation trigger
     triggerConversation() {
         console.log("Starting horror conversation...");
+        this.isConversationActive = true;
 
         const lines = I18N[this.currentLang].script;
         const subUI = document.getElementById("subtitles");
@@ -1527,6 +1546,7 @@ class HybridEngine {
 
         this.voiceEngine.speakSequence(lines, this.currentLang, () => {
             console.log("Conversation complete — triggering jumpscare.");
+            this.isConversationActive = false;
             this.triggerJumpscare();
         });
     }
