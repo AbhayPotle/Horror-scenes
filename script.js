@@ -500,7 +500,9 @@ class VoiceEngine {
 
     speak(text, lang, type = "demon", params = {}, onEnd = null) {
         let callbackFired = false;
-        const safeOnEnd = () => {
+        const startTime = Date.now();
+
+        const doCallback = () => {
             if (callbackFired) return;
             callbackFired = true;
             if (window.engine && window.engine.tapeDeck)
@@ -512,6 +514,20 @@ class VoiceEngine {
                 } catch (e) {
                     console.error("onEnd error:", e);
                 }
+        };
+
+        const safeOnEnd = () => {
+            const elapsed = Date.now() - startTime;
+            // Estimate minimum duration: 80ms per character or at least 1.5 seconds per line
+            const minDuration = Math.max(1500, text.length * 80);
+            const remaining = minDuration - elapsed;
+
+            if (remaining > 0) {
+                console.log(`TTS finished early (${elapsed}ms). Enforcing delay of ${remaining}ms.`);
+                setTimeout(doCallback, remaining);
+            } else {
+                doCallback();
+            }
         };
 
         if (window.engine && window.engine.tapeDeck)
