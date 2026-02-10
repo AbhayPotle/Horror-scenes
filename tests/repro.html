@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reproduction Test</title>
+    <link rel="stylesheet" href="../style.css">
+    <script>
+        // Catch errors
+        window.onerror = function (msg, url, line, col, error) {
+            const err = `Error: ${msg}\nLine: ${line}:${col}\nStack: ${error ? error.stack : 'N/A'}`;
+            console.error(err);
+            const p = document.createElement('div');
+            p.style.color = 'red';
+            p.innerText = err;
+            document.body.appendChild(p);
+        };
+        window.onunhandledrejection = function (event) {
+            console.error("Unhandled Rejection:", event.reason);
+            const p = document.createElement('div');
+            p.style.color = 'orange';
+            p.innerText = "Unhandled Rejection: " + event.reason;
+            document.body.appendChild(p);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <video id="mainVideo" style="display:none;"></video>
+        <canvas id="scareCanvas"></canvas>
+        <div id="ui-layer">
+            <div class="monitor-overlay" style="display: none;"></div>
+            <div id="subtitles" class="hidden"></div>
+            <div id="landing-page">
+                <h1 id="landing-title">TITLE</h1>
+                <button id="start-btn" onclick="window.engine.setLang('en')">START</button>
+            </div>
+            <div id="episode-title" class="hidden">
+                <h1>EP 1</h1>
+                <h2>SUB</h2>
+            </div>
+            <div id="final-message" class="hidden">
+                <h1>END</h1>
+                <p>SUB</p>
+            </div>
+            <div id="loading-screen" class="hidden">
+                <p id="loading-text">LOADING</p>
+            </div>
+            <div id="spirit-box-display"></div>
+            <audio id="ambientSound"></audio>
+            <audio id="scareSound"></audio>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Auto-run verification
+        window.addEventListener('load', () => {
+            console.log("Page loaded. Engine:", window.engine);
+            if (!window.engine) {
+                console.error("Window.engine is missing!");
+                // Try initializing manually if script didn't
+                try {
+                    window.engine = new HybridEngine();
+                    console.log("Manually initialized engine");
+                } catch (e) {
+                    console.error("Failed to init engine:", e);
+                }
+            }
+
+            // Simulate start after 1 second
+            setTimeout(() => {
+                console.log("Simulating click on start...");
+                const btn = document.getElementById('start-btn');
+                if (btn) btn.click();
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

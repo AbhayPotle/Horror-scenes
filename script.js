@@ -1,6 +1,6 @@
 ﻿// Core Configuration
 const CONFIG = {
-    totalImages: 28,
+    totalImages: 29,
     debugMode: false,
     languages: ["en", "hi", "te"],
     defaultLang: "en",
@@ -1198,10 +1198,11 @@ class HybridEngine {
         // Load scare images (for non-conversation scenes)
         for (let i = 1; i <= CONFIG.totalImages; i++) {
             const img = new Image();
-            img.src = `assets/scare_${i}.png`;
+            const ext = (i >= 29) ? "jpg" : "png";
+            img.src = `assets/scare_${i}.${ext}`;
             img.onload = () => {
                 this.loadedImagesCount++;
-                if (CONFIG.debugMode) console.log(`Loaded scare_${i}.png`);
+                if (CONFIG.debugMode) console.log(`Loaded scare_${i}.${ext}`);
             };
             this.scareImages.push(img);
         }

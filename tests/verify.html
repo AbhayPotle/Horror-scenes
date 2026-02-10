@@ -40,7 +40,7 @@
         const log = document.getElementById('log');
         let passed = 0;
         let failed = 0;
-        const totalChecks = 30; // 28 images + 2 system checks
+        const totalChecks = 32; // 30 images + 2 system checks
 
         function logMsg(msg, status) {
             const el = document.createElement('div');
@@ -101,7 +101,7 @@
 
         // 3. Check Image Assets (scare_1 to scare_34)
         const assetsDir = '../assets'; // Relative to tests/ folder
-        for (let i = 1; i <= 28; i++) {
+        for (let i = 1; i <= 30; i++) {
             const imgName = `scare_${i}.png`;
             const img = new Image();
             img.onload = () => logMsg(`${imgName} loaded successfully (${img.width}x${img.height}).`, "pass");

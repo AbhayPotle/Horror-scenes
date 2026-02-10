@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Audio Debug Test</title>
+    <style>
+        body {
+            background: #111;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #333;
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+
+        button:hover {
+            background: #0f0;
+            color: #000;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            background: #000;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #0f0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: lime;
+        }
+
+        .warn {
+            color: yellow;
+        }
+
+        h2 {
+            color: #0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔊 Audio Debug Panel</h1>
+    <p>Click buttons below to test each audio component individually.</p>
+
+    <h2>1. AudioContext Test</h2>
+    <button onclick="testAudioContext()">Test AudioContext</button>
+
+    <h2>2. Play Simple Tone</h2>
+    <button onclick="playTone()">Play 440Hz Tone (1s)</button>
+
+    <h2>3. Play Noise (TapeDeck style)</h2>
+    <button onclick="playNoise()">Play White Noise</button>
+
+    <h2>4. Text-to-Speech (VoiceEngine)</h2>
+    <button onclick="testTTS()">Speak "Hello"</button>
+    <button onclick="listVoices()">List Available Voices</button>
+
+    <h2>5. Load script.js and test</h2>
+    <button onclick="loadScript()">Load script.js</button>
+    <button onclick="testEngine()">Test Full Engine Audio</button>
+    <button onclick="testConversation()">Test Conversation</button>
+
+    <div id="log"></div>
+
+    <script>
+        let audioCtx = null;
+
+        function log(msg, type = '') {
+            const el = document.getElementById('log');
+            const span = document.createElement('span');
+            span.className = type;
+            span.textContent = new Date().toLocaleTimeString() + ' | ' + msg + '\n';
+            el.appendChild(span);
+            el.scrollTop = el.scrollHeight;
+            console.log(msg);
+        }
+
+        function testAudioContext() {
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) {
+                    log('❌ AudioContext NOT supported!', 'error');
+                    return;
+                }
+                audioCtx = new AC();
+                log('✅ AudioContext created, state: ' + audioCtx.state, 'success');
+
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume().then(() => {
+                        log('✅ AudioContext resumed, state: ' + audioCtx.state, 'success');
+                    }).catch(e => {
+                        log('❌ AudioContext resume failed: ' + e.message, 'error');
+                    });
+                }
+            } catch (e) {
+                log('❌ AudioContext error: ' + e.message, 'error');
+            }
+        }
+
+        function playTone() {
+            if (!audioCtx) testAudioContext();
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.value = 440;
+                gain.gain.value = 0.5;
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1);
+                log('🔊 Playing 440Hz tone for 1 second...', 'success');
+                log('   AudioContext state: ' + audioCtx.state);
+                log('   Sample rate: ' + audioCtx.sampleRate);
+            } catch (e) {
+                log('❌ Tone failed: ' + e.message, 'error');
+            }
+        }
+
+        function playNoise() {
+            if (!audioCtx) testAudioContext();
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const bufferSize = audioCtx.sampleRate * 1;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const source = audioCtx.createBufferSource();
+                source.buffer = buffer;
+                const gain = audioCtx.createGain();
+                gain.gain.value = 0.3;
+                source.connect(gain);
+                gain.connect(audioCtx.destination);
+                source.start();
+                log('🔊 Playing white noise for 1 second...', 'success');
+            } catch (e) {
+                log('❌ Noise failed: ' + e.message, 'error');
+            }
+        }
+
+        function testTTS() {
+            try {
+                const synth = window.speechSynthesis;
+                if (!synth) {
+                    log('❌ SpeechSynthesis NOT supported!', 'error');
+                    return;
+                }
+
+                log('SpeechSynthesis exists, speaking: ' + synth.speaking);
+
+                if (synth.speaking) synth.cancel();
+
+                const utter = new SpeechSynthesisUtterance('Hello, can you hear me? This is a test.');
+                utter.rate = 1.0;
+                utter.pitch = 1.0;
+                utter.volume = 1.0;
+
+                utter.onstart = () => log('✅ TTS started speaking', 'success');
+                utter.onend = () => log('✅ TTS finished speaking', 'success');
+                utter.onerror = (e) => log('❌ TTS error: ' + e.error, 'error');
+
+                synth.speak(utter);
+                log('🔊 TTS speak() called...');
+            } catch (e) {
+                log('❌ TTS exception: ' + e.message, 'error');
+            }
+        }
+
+        function listVoices() {
+            const synth = window.speechSynthesis;
+            if (!synth) {
+                log('❌ SpeechSynthesis NOT supported!', 'error');
+                return;
+            }
+            const voices = synth.getVoices();
+            log('Found ' + voices.length + ' voices:');
+            voices.forEach((v, i) => {
+                log('  [' + i + '] ' + v.name + ' (' + v.lang + ')' + (v.default ? ' DEFAULT' : ''));
+            });
+            if (voices.length === 0) {
+                log('⚠️ No voices loaded yet. Try clicking again in 1 second.', 'warn');
+            }
+        }
+
+        function loadScript() {
+            try {
+                const script = document.createElement('script');
+                script.src = '../script.js?v=' + Date.now();
+                script.onload = () => {
+                    log('✅ script.js loaded successfully!', 'success');
+                    if (window.engine) {
+                        log('✅ window.engine exists', 'success');
+                        log('   tapeDeck: ' + (window.engine.tapeDeck ? 'YES' : 'NO'));
+                        log('   voiceEngine: ' + (window.engine.voiceEngine ? 'YES' : 'NO'));
+                        log('   currentLang: ' + window.engine.currentLang);
+                    } else {
+                        log('⚠️ window.engine not created yet (waiting for DOMContentLoaded)', 'warn');
+                        // Force create it
+                        window.engine = new HybridEngine();
+                        log('✅ Manually created HybridEngine', 'success');
+                    }
+                };
+                script.onerror = (e) => {
+                    log('❌ Failed to load script.js: ' + e, 'error');
+                };
+                document.body.appendChild(script);
+                log('Loading script.js...');
+            } catch (e) {
+                log('❌ Load error: ' + e.message, 'error');
+            }
+        }
+
+        function testEngine() {
+            if (!window.engine) {
+                log('❌ Engine not loaded! Click "Load script.js" first.', 'error');
+                return;
+            }
+            try {
+                log('Testing TapeDeck...');
+                window.engine.tapeDeck.resume();
+                log('   TapeDeck ctx state: ' + window.engine.tapeDeck.ctx.state);
+                log('   TapeDeck unlocked: ' + window.engine.tapeDeck.unlocked);
+
+                log('Playing scenario 1 (HauntedHouse)...');
+                window.engine.tapeDeck.playScenario(1);
+                log('✅ Scenario 1 should be playing', 'success');
+
+                setTimeout(() => {
+                    log('Playing scenario 3...');
+                    window.engine.tapeDeck.playScenario(3);
+                    log('✅ Scenario 3 should be playing', 'success');
+                }, 2000);
+            } catch (e) {
+                log('❌ Engine test failed: ' + e.message, 'error');
+            }
+        }
+
+        function testConversation() {
+            if (!window.engine) {
+                log('❌ Engine not loaded! Click "Load script.js" first.', 'error');
+                return;
+            }
+            try {
+                log('Testing conversation...');
+                window.engine.currentLang = 'en';
+                window.engine.tapeDeck.resume();
+                window.engine.voiceEngine.unlock();
+                window.engine.triggerConversation();
+                log('✅ Conversation triggered', 'success');
+            } catch (e) {
+                log('❌ Conversation test failed: ' + e.message, 'error');
+            }
+        }
+
+        // Auto-log page load
+        log('Audio Debug Panel loaded. Click buttons to test.');
+        log('Browser: ' + navigator.userAgent);
+    </script>
+</body>
+
+</html>

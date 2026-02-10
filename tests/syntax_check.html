@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Syntax Check</title>
+    <style>
+        body {
+            background: #222;
+            color: #fff;
+            font-family: monospace;
+            padding: 20px;
+        }
+
+        .success {
+            color: #0f0;
+        }
+
+        .error {
+            color: #f00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Script Loading Diagnostic</h1>
+    <div id="status">Loading...</div>
+    <div id="console"></div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const consoleEl = document.getElementById('console');
+
+        window.onerror = function (msg, url, line, col, error) {
+            statusEl.innerText = "SCRIPT ERROR FOUND";
+            statusEl.className = "error";
+            const div = document.createElement('div');
+            div.className = "error";
+            div.innerText = `${msg}\nAt: ${url}:${line}:${col}\nStack: ${error ? error.stack : 'N/A'}`;
+            consoleEl.appendChild(div);
+            return false;
+        };
+
+        window.onload = function () {
+            if (window.engine) {
+                statusEl.innerText = "SCRIPT LOADED SUCCESSFULLY";
+                statusEl.className = "success";
+                const div = document.createElement('div');
+                div.className = "success";
+                div.innerText = "HybridEngine instance found. Audio Context State: " + (window.engine.tapeDeck && window.engine.tapeDeck.ctx ? window.engine.tapeDeck.ctx.state : 'N/A');
+                consoleEl.appendChild(div);
+            } else {
+                // If onload fires but engine is missing, maybe script loaded but didn't init?
+                if (statusEl.className !== "error") {
+                    statusEl.innerText = "SCRIPT LOADED BUT ENGINE NOT FOUND (Check console)";
+                    statusEl.className = "error";
+                }
+            }
+        };
+    </script>
+    <script src="../script.js"></script>
+</body>
+
+</html>
