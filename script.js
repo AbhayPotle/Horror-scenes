@@ -566,23 +566,24 @@ class VoiceEngine {
 
             if (params.pitch) utter.pitch = params.pitch;
             if (params.rate) utter.rate = params.rate;
-            if (params.volume) utter.volume = params.volume;
 
-            if (params.jitter) {
-                utter.pitch += Math.random() * params.jitter - params.jitter / 2;
-                utter.rate += Math.random() * params.jitter - params.jitter / 2;
-                utter.pitch = Math.max(0.1, Math.min(2, utter.pitch));
-                utter.rate = Math.max(0.1, Math.min(2, utter.rate));
+            // FORCE RESET for Hindi/Telugu to prevent "fast-forward" (engine crash)
+            if (lang.startsWith('hi') || lang.startsWith('te')) {
+                utter.rate = 1.0;
+                utter.pitch = 1.0;
+                // Add mild variety if safe
+                if (type === "child") utter.pitch = 1.2;
+                if (type === "demon") utter.pitch = 0.8;
+                console.log(`[${lang}] Forced safe params: rate=1.0, pitch=${utter.pitch}`);
             }
 
-            // Language specific base modifiers
+            // Language specific base modifiers (removed aggressive multipliers)
+            /* 
             let baseRate = 1.0;
-            if (lang.startsWith('hi')) {
-                baseRate = 0.9;
-            } else if (lang.startsWith('te')) {
-                baseRate = 0.85;
-            }
-            utter.rate *= baseRate;
+            if (lang.startsWith('hi')) { baseRate = 0.9; } 
+            else if (lang.startsWith('te')) { baseRate = 0.85; }
+            utter.rate *= baseRate; 
+            */
 
             if (this.voices.length > 0) {
                 const langCode = lang.split("-")[0];
@@ -598,7 +599,7 @@ class VoiceEngine {
                     );
 
                 let voice = null;
-                // Enhanced voice keywords for Indian languages
+                // Enhanced voice keywords
                 if (langCode === 'hi' || langCode === 'te') {
                     if (type === "child" || type === "mother" || type === "ghost") {
                         voice = findVoice(["Lekha", "Kalpana", "Google", "Female", "India"]);
@@ -607,43 +608,40 @@ class VoiceEngine {
                     }
                 } else {
                     if (type === "child" || type === "mother" || type === "ghost") {
-                        voice = findVoice([
-                            "Zira",
-                            "Eva",
-                            "Sara",
-                            "Female",
-                            "Google US English",
-                            "Samantha",
-                        ]);
+                        voice = findVoice(["Zira", "Eva", "Female", "Google US English", "Samantha"]);
                     } else {
-                        voice = findVoice([
-                            "David",
-                            "Mark",
-                            "Male",
-                            "Google UK English Male",
-                        ]);
+                        voice = findVoice(["David", "Mark", "Male", "Google UK English Male"]);
                     }
                 }
 
                 if (!voice && pool.length > 0) voice = pool[0];
-                if (voice) utter.voice = voice;
+                if (voice) {
+                    utter.voice = voice;
+                    console.log(`Voice selected for [${lang}]: ${voice.name}`);
+                } else {
+                    console.warn(`No voice found for [${lang}]`);
+                }
             }
 
             this.currentUtterance = utter;
 
-            utter.onend = safeOnEnd;
-            utter.onerror = (e) => {
-                console.warn("TTS Error event:", e);
+            utter.onstart = () => console.log(`TTS Started: "${text.substring(0, 20)}..."`);
+            utter.onend = () => {
+                console.log("TTS Ended normally");
                 safeOnEnd();
             };
+            utter.onerror = (e) => {
+                console.warn("TTS Error event:", e.error);
+                safeOnEnd(); // Ensure we still move on, but log it
+            };
 
-            // Failsafe based on text length + buffer
-            setTimeout(
-                () => {
-                    if (!callbackFired) safeOnEnd();
-                },
-                text.length * 200 + 5000,
-            );
+            // Failsafe with longer buffer
+            setTimeout(() => {
+                if (!callbackFired) {
+                    console.warn("TTS Timeout Failsafe triggered");
+                    safeOnEnd();
+                }
+            }, text.length * 500 + 5000); // Increased buffer significantly
 
             setTimeout(() => this.synth.speak(utter), 10);
         } catch (e) {
