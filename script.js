@@ -701,7 +701,8 @@ class TapeDeck {
                     return panner;
                 };
             }
-            this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+            this.masterGain.gain.setValueAtTime(0.8, this.ctx.currentTime);
+            console.log("TapeDeck initialized successfully, masterGain set to 0.8");
         } catch (e) {
             console.warn("TapeDeck init failed, using mock", e);
             this.ctx = {
