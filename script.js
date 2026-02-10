@@ -535,13 +535,16 @@ class VoiceEngine {
             const utter = new SpeechSynthesisUtterance(text);
             utter.lang = lang;
 
+            // Clamp pitch/rate for non-English to avoid robotic artifacts
+            const isNonEn = !lang.startsWith('en');
+
             if (type === "demon") {
-                utter.pitch = 0.1;
-                utter.rate = 0.8;
+                utter.pitch = isNonEn ? 0.6 : 0.1; // Extreme low pitch breaks Hindi TTS
+                utter.rate = isNonEn ? 0.9 : 0.8;
                 utter.volume = 1.0;
             } else if (type === "child") {
-                utter.pitch = 2.2;
-                utter.rate = 1.2;
+                utter.pitch = isNonEn ? 1.4 : 2.2; // Extreme high pitch breaks Hindi TTS
+                utter.rate = isNonEn ? 1.1 : 1.2;
                 utter.volume = 0.8;
             } else if (type === "whisper") {
                 utter.pitch = 0.5;
@@ -552,11 +555,11 @@ class VoiceEngine {
                 utter.rate = 1.1;
                 utter.volume = 0.9;
             } else if (type === "father") {
-                utter.pitch = 0.6;
+                utter.pitch = isNonEn ? 0.9 : 0.6; // Low pitch father sounds robotic in Hindi
                 utter.rate = 0.9;
                 utter.volume = 0.9;
             } else if (type === "ghost") {
-                utter.pitch = 1.5;
+                utter.pitch = isNonEn ? 1.3 : 1.5;
                 utter.rate = 1.5;
                 utter.volume = 0.4;
             }
@@ -572,7 +575,14 @@ class VoiceEngine {
                 utter.rate = Math.max(0.1, Math.min(2, utter.rate));
             }
 
-            if (lang !== "en") utter.rate = utter.rate * 0.8;
+            // Language specific base modifiers
+            let baseRate = 1.0;
+            if (lang.startsWith('hi')) {
+                baseRate = 0.9;
+            } else if (lang.startsWith('te')) {
+                baseRate = 0.85;
+            }
+            utter.rate *= baseRate;
 
             if (this.voices.length > 0) {
                 const langCode = lang.split("-")[0];
@@ -588,26 +598,31 @@ class VoiceEngine {
                     );
 
                 let voice = null;
-                if (type === "child" || type === "mother" || type === "ghost") {
-                    voice = findVoice([
-                        "Zira",
-                        "Eva",
-                        "Sara",
-                        "Female",
-                        "Google US English",
-                        "Samantha",
-                        "Hindi Female",
-                        "Telugu Female",
-                    ]);
+                // Enhanced voice keywords for Indian languages
+                if (langCode === 'hi' || langCode === 'te') {
+                    if (type === "child" || type === "mother" || type === "ghost") {
+                        voice = findVoice(["Lekha", "Kalpana", "Google", "Female", "India"]);
+                    } else {
+                        voice = findVoice(["Hemant", "Neil", "Google", "Male", "India"]);
+                    }
                 } else {
-                    voice = findVoice([
-                        "David",
-                        "Mark",
-                        "Male",
-                        "Google UK English Male",
-                        "Hindi Male",
-                        "Telugu Male",
-                    ]);
+                    if (type === "child" || type === "mother" || type === "ghost") {
+                        voice = findVoice([
+                            "Zira",
+                            "Eva",
+                            "Sara",
+                            "Female",
+                            "Google US English",
+                            "Samantha",
+                        ]);
+                    } else {
+                        voice = findVoice([
+                            "David",
+                            "Mark",
+                            "Male",
+                            "Google UK English Male",
+                        ]);
+                    }
                 }
 
                 if (!voice && pool.length > 0) voice = pool[0];
