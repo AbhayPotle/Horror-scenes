@@ -790,6 +790,13 @@ class TapeDeck {
         this.activeNodes = [];
     }
 
+    suspend() {
+        this.stopAll();
+        if (this.ctx && this.ctx.suspend) {
+            this.ctx.suspend().catch((e) => console.warn("TapeDeck suspend error:", e));
+        }
+    }
+
     createNoise(duration) {
         const bufferSize = this.ctx.sampleRate * duration;
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
@@ -1428,6 +1435,13 @@ class HybridEngine {
         title.classList.add("visible");
         title.style.display = "flex";
 
+        // SPEAK the Episode Title aloud
+        const texts = I18N[this.currentLang];
+        if (texts) {
+            const titleText = texts.episodeTitle + ". " + texts.episodeSubtitle;
+            this.voiceEngine.speak(titleText, this.currentLang, "demon", { pitch: 0.3, rate: 0.6, volume: 1.0 });
+        }
+
         setTimeout(() => {
             if (!this.isVideoActive) {
                 document.getElementById("loading-screen").classList.add("hidden");
@@ -1461,21 +1475,37 @@ class HybridEngine {
 
         const lines = I18N[this.currentLang].script;
         const subUI = document.getElementById("subtitles");
+        console.log("Subtitle element found:", !!subUI);
+        console.log("Number of script lines:", lines ? lines.length : 0);
+
+        if (!lines || lines.length === 0) {
+            console.error("No script lines found for language:", this.currentLang);
+            return;
+        }
+
+        // Ensure subtitles are ready (remove hidden, set initial state)
+        if (subUI) {
+            subUI.classList.remove("hidden");
+            subUI.style.display = "block";
+            subUI.style.opacity = "0";
+        }
 
         // Simple subtitle renderer
         lines.forEach((line, i) => {
             line.onStart = () => {
+                console.log("Subtitle showing:", line.prefix + line.text);
                 if (!subUI) return;
                 subUI.innerText = line.prefix + line.text;
                 subUI.style.color = line.color || "#fff";
+                subUI.style.display = "block";
+                subUI.style.opacity = "1";
                 subUI.classList.remove("hidden");
                 subUI.classList.add("visible");
-                subUI.style.display = "block";
             };
             line.onEnd = () => {
                 if (subUI) {
+                    subUI.style.opacity = "0";
                     subUI.classList.remove("visible");
-                    subUI.classList.add("hidden");
                 }
                 // BONUS: Preserving sound effects (Creak and Door Slam)
                 if (i === 3)
@@ -1491,6 +1521,10 @@ class HybridEngine {
             };
         });
 
+        // Ensure audio is unlocked before speaking
+        this.tapeDeck.resume();
+        this.voiceEngine.unlock();
+
         this.voiceEngine.speakSequence(lines, this.currentLang, () => {
             console.log("Conversation complete — triggering jumpscare.");
             this.triggerJumpscare();
@@ -1499,7 +1533,7 @@ class HybridEngine {
 
     terminateSession() {
         console.log("Terminating Session...");
-        this.tapeDeck.suspend();
+        try { this.tapeDeck.suspend(); } catch (e) { console.warn("Suspend error:", e); }
         this.scareActive = false;
         this.isVideoActive = false;
 
@@ -1507,7 +1541,10 @@ class HybridEngine {
         if (monitor) monitor.style.display = "none";
         if (this.canvas) this.canvas.classList.remove("visible");
         const subUI = document.getElementById("subtitles");
-        if (subUI) subUI.classList.remove("visible");
+        if (subUI) {
+            subUI.classList.remove("visible");
+            subUI.style.opacity = "0";
+        }
 
         const finalMsg = document.getElementById("final-message");
         if (finalMsg) {
@@ -1518,6 +1555,15 @@ class HybridEngine {
             const h1 = finalMsg.querySelector("h1");
             if (h1 && !h1.getAttribute("data-text"))
                 h1.setAttribute("data-text", h1.innerText);
+
+            // Speak the final message
+            const texts = I18N[this.currentLang];
+            if (texts) {
+                try {
+                    this.tapeDeck.resume();
+                    this.voiceEngine.speak(texts.finalMessage + ". " + texts.finalSubmessage, this.currentLang, "demon", { pitch: 0.1, rate: 0.4, volume: 1.0 });
+                } catch (e) { console.warn("Final message TTS error:", e); }
+            }
         } else {
             document.body.innerHTML = "";
             document.body.style.backgroundColor = "black";
@@ -1616,8 +1662,8 @@ class HybridEngine {
             this.scareActive = false;
             this.canvas.classList.remove("glitch");
             this.canvas.style.filter = "none";
-            this.isVideoActive = true;
-            this.renderFeed();
+            // After jumpscare ends, show the final message
+            this.terminateSession();
         }, 3000);
     }
 
