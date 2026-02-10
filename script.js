@@ -1218,6 +1218,8 @@ class HybridEngine {
         this.loadedImagesCount = 0;
         this.timeOffset = 0;
         this.isConversationActive = false;
+        this.isMonitoringActive = false;
+        this.isSequenceStarted = false;
         this.preloadImages();
 
         this.initUI();
@@ -1292,6 +1294,10 @@ class HybridEngine {
     }
 
     startMonitoring() {
+        if (this.isMonitoringActive) return;
+        this.isMonitoringActive = true;
+        console.log("Monitoring started.");
+
         this.uiLayer.classList.remove("hidden");
         document.querySelector(".monitor-overlay").style.display = "flex";
 
@@ -1318,13 +1324,16 @@ class HybridEngine {
 
         this.tapeDeck.playScenario(3);
 
-        setInterval(() => {
-            if (Math.random() > 0.8) this.triggerSpiritMessage();
-        }, 5000);
+        // Keep spirit messages infrequent
+        if (this.spiritInterval) clearInterval(this.spiritInterval);
+        this.spiritInterval = setInterval(() => {
+            if (Math.random() > 0.8 && !this.isConversationActive) this.triggerSpiritMessage();
+        }, 8000);
 
+        // Single trigger for conversation after a set delay
         setTimeout(() => {
             this.triggerConversation();
-        }, 3000); // ACCELERATED START
+        }, 5000);
 
         setTimeout(() => this.triggerParanormalEvent(), 3000);
     }
@@ -1477,6 +1486,10 @@ class HybridEngine {
     }
 
     startSequence() {
+        if (this.isSequenceStarted) return;
+        this.isSequenceStarted = true;
+        console.log("Sequence started.");
+
         document.getElementById("landing-page").classList.add("hidden");
         const title = document.getElementById("episode-title");
         title.classList.remove("hidden");
@@ -1490,35 +1503,24 @@ class HybridEngine {
             this.voiceEngine.speak(titleText, this.currentLang, "demon", { pitch: 0.3, rate: 0.6, volume: 1.0 });
         }
 
-        setTimeout(() => {
-            if (!this.isVideoActive) {
-                document.getElementById("loading-screen").classList.add("hidden");
-                const title = document.getElementById("episode-title");
-                if (title) {
-                    title.classList.remove("visible");
-                    title.style.display = "none";
-                }
-                this.startMonitoring();
-            }
-        }, 8000);
-
         try {
             this.tapeDeck.playScenario(1);
         } catch (e) { }
 
+        // Cleanup: Hide cinematic title and show monitor after exactly 6 seconds
         setTimeout(() => {
             title.classList.remove("visible");
-            setTimeout(() => (title.style.display = "none"), 2000);
-            document.getElementById("loading-screen").classList.remove("hidden");
             setTimeout(() => {
+                title.style.display = "none";
                 document.getElementById("loading-screen").classList.add("hidden");
                 this.startMonitoring();
-            }, 3000);
+            }, 2000);
         }, 4000);
     }
 
     // NOTE: Simplified conversation trigger
     triggerConversation() {
+        if (this.isConversationActive) return;
         console.log("Starting horror conversation...");
         this.isConversationActive = true;
 
